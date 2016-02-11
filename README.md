@@ -1,6 +1,8 @@
 # grjs
 
-Hello, world!
+You can check the project at [grjs.smutnyleszek.com](http://grjs.smutnyleszek.com) or build it yourself.
+
+TDD:
 
 - http://evanhahn.com/how-do-i-jasmine/
 - http://alistapart.com/article/writing-testable-javascript
@@ -22,6 +24,4 @@ grunt build
 jekyll serve --watch --baseurl ''
 ```
 
-The project will be served at [http://127.0.0.1:4000/](127.0.0.1:4000) and the local version will be available in `_site` directory.
-
-Alternatively you could go with `jekyll build`, just make sure to change `baseurl` in `_config.yml`.
+The project will be served at [http://127.0.0.1:4000/](127.0.0.1:4000) (and the local version will be available in `_site` directory). Alternatively you could just go with `jekyll build` and open `_site/index.html` in the browser.
