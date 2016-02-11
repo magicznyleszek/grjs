@@ -1,0 +1,11 @@
+# Jekyll site is built by gh-pages
+_site
+.jekyll-metadata
+
+# assets
+node_modules
+
+# OS generated
+.DS_Store
+ehthumbs.db
+Thumbs.db

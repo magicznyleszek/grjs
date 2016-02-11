@@ -1,0 +1,24 @@
+# description
+name: "grjs"
+description: "A javascript test exercise."
+keywords: "javascript, tdd, vanilla, css4"
+author: "Leszek Pietrzak"
+
+# address settings
+baseurl: "http://grjs.smutnyleszek.com"
+
+# site configuration
+safe: true
+quiet: false
+future: true
+encoding: utf-8
+markdown: kramdown
+kramdown:
+    auto_ids: false
+timezone: Europe/Warsaw
+
+# excludes
+exclude:
+    - node_modules
+    - Gruntfile.js
+    - package.json
