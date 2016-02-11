@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         clean: {
-            generativeAssets: {
+            public: {
                 src: [
                     'public/scripts',
                     'public/styles'
@@ -15,11 +15,11 @@ module.exports = function(grunt) {
             }
         },
         copy: {
-            nodeModules: {
+            thirdparty: {
                 expand: true,
-                files: {
-                    'public/scripts/thirdparty/lodash.js': 'node_modules/lodash/lodash.js'
-                }
+                cwd: '_assets/scripts/thirdparty',
+                src: '**/*.js',
+                dest: 'public/scripts/thirdparty'
             }
         },
         concat: {
@@ -57,12 +57,24 @@ module.exports = function(grunt) {
                 files: ['_assets/scripts/app/**/*.js'],
                 tasks: ['concat:scripts']
             }
+        },
+        jasmine: {
+            src: '_assets/scripts/app/**/*.js',
+            options: {
+                vendor: '_assets/scripts/thirdparty/**/*.js',
+                specs: '_assets/scripts/tests/**/*Spec.js',
+                helpers: '_assets/scripts/tests/**/*Helper.js'
+            }
+        },
+        'jasmine-server' : {
+            browser: false
         }
     });
 
     grunt.registerTask('build_assets', [
-        'clean:generativeAssets',
-        'copy:nodeModules',
+        'jasmine',
+        'clean:public',
+        'copy:thirdparty',
         'concat:scripts',
         'cssnext'
     ]);
