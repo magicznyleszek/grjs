@@ -2,11 +2,10 @@
 
 You can check the project at [grjs.smutnyleszek.com](http://grjs.smutnyleszek.com) or build it yourself.
 
-TDD:
-
 - http://evanhahn.com/how-do-i-jasmine/
 - http://alistapart.com/article/writing-testable-javascript
 - http://code.tutsplus.com/tutorials/test-driven-javascript-development-in-practice--net-16246
+- http://blog.pluralsight.com/the-prototype-pattern-structuring-javascript-code-part-ii
 
 
 ## Building
