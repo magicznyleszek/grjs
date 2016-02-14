@@ -14,12 +14,21 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        copy: {
-            thirdparty: {
-                expand: true,
-                cwd: '_assets/scripts/thirdparty',
-                src: '**/*.js',
-                dest: 'public/scripts/thirdparty'
+        svgstore: {
+            default: {
+                options: {
+                    prefix: 'symbol-',
+                    svg: {
+                        style: 'width: 0; height: 0; overflow: hidden; position: fixed; visibility: hidden;'
+                    },
+                    formatting: {
+                        indent_size: 4
+                    }
+                },
+                files: {
+                    '_includes/symbols.svg': ['_assets/symbols/*.svg']
+                }
+
             }
         },
         concat: {
@@ -32,8 +41,8 @@ module.exports = function(grunt) {
                     banner: '/* <%= grunt.template.today("yyyy-mm-dd") %> */\n'
                 },
                 files: {
-                    'public/scripts/app.js': [
-                        '_assets/scripts/app/main.js'
+                    'public/scripts/monolith.js': [
+                        '_assets/scripts/app/app.js'
                     ]
                 }
             }
@@ -45,7 +54,9 @@ module.exports = function(grunt) {
                 compress: true
             },
             dist: {
-                files: { 'public/styles/main.css': '_assets/styles/main.css' }
+                files: {
+                    'public/styles/main.css': '_assets/styles/main.css'
+                }
             }
         },
         watch: {
@@ -66,7 +77,7 @@ module.exports = function(grunt) {
                 helpers: '_assets/scripts/tests/**/*Helper.js'
             }
         },
-        'jasmine-server' : {
+        'jasmine-server': {
             browser: false
         }
     });
@@ -74,7 +85,7 @@ module.exports = function(grunt) {
     grunt.registerTask('build_assets', [
         'jasmine',
         'clean:public',
-        'copy:thirdparty',
+        'svgstore',
         'concat:scripts',
         'cssnext'
     ]);
