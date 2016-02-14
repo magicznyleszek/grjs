@@ -31,14 +31,6 @@ module.exports = function(grunt) {
 
             }
         },
-        copy: {
-            thirdparty: {
-                expand: true,
-                cwd: '_assets/scripts/thirdparty',
-                src: '**/*.js',
-                dest: 'public/scripts/thirdparty'
-            }
-        },
         concat: {
             scripts: {
                 options: {
@@ -49,8 +41,8 @@ module.exports = function(grunt) {
                     banner: '/* <%= grunt.template.today("yyyy-mm-dd") %> */\n'
                 },
                 files: {
-                    'public/scripts/app.js': [
-                        '_assets/scripts/app/main.js'
+                    'public/scripts/monolith.js': [
+                        '_assets/scripts/app/app.js'
                     ]
                 }
             }
@@ -94,7 +86,6 @@ module.exports = function(grunt) {
         'jasmine',
         'clean:public',
         'svgstore',
-        'copy:thirdparty',
         'concat:scripts',
         'cssnext'
     ]);
