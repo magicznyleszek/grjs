@@ -1,39 +1,3 @@
-/* 2016-02-17 */
-// global helpers
-'use strict';
-
-// Adds object properties to another object.
-// @param {object} obj
-var extend = function (baseObj, addedObj) {
-    for (var key in addedObj) {
-        if (addedObj.hasOwnProperty(key)) {
-            baseObj[key] = addedObj[key];
-        }
-    }
-}
-
-/* --- */
-// global namespace
-var app = app || {};
-
-/* --- */
-(function (window) {
-    'use strict';
-
-    // constructor
-    var AppActions = function () {
-        return {
-            testAction: 'GRJS_TEST_ACTION'
-        }
-    }
-
-    // export to app
-	window.app = window.app || {};
-	window.app.actions = new AppActions();
-
-})(window);
-
-/* --- */
 (function (window) {
     'use strict';
 

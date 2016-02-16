@@ -42,7 +42,10 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'public/scripts/monolith.js': [
-                        '_assets/scripts/app/app.js'
+                        '_assets/scripts/app/helpers.js',
+                        '_assets/scripts/app/app.js',
+                        '_assets/scripts/app/pubsub/actions.js',
+                        '_assets/scripts/app/pubsub/broadcaster.js'
                     ]
                 }
             }
