@@ -17,6 +17,9 @@ kramdown:
     auto_ids: false
 timezone: Europe/Warsaw
 
+# misc
+fontUrl: "https://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,latin-ext"
+
 # excludes
 exclude:
     - node_modules
