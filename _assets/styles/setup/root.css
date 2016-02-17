@@ -2,11 +2,6 @@
 root stuff and normalizations
 ------------------------------------------------------------------------------*/
 
-/* Root line height is being used in many places throughout the project.
-It is recommended to keep all vertical margins and heights of elements to match
-the leading. Use caution when adding borders or when using vertical-align middle
-as they tend to add unwanted pixels, thus braking the flow. */
-
 @import '_config.css';
 
 html {
@@ -19,6 +14,8 @@ html {
     min-height: 100%;
 
     color: var(--app-txt-c);
+    background-image: var(--app-bg-gr);
+    background-repeat: no-repeat;
     background-color: var(--app-bg-c);
 
     box-sizing: border-box;
@@ -30,13 +27,14 @@ html {
 
 @media (--smaller) { html { font-size: var(--rootFontSizeSmaller); } }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
     box-sizing: inherit;
 }
 
 body {
     margin: 0;
     width: 100%;
-    max-width: var(--app-content-w);
-    padding: calc(var(--leading-s) * 2) var(--leading-s);
+    max-width: 100%;
 }

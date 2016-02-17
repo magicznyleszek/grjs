@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------------
-icon config
+symbol config
 ------------------------------------------------------------------------------*/
 
 :root {
 
-    --icon-s: var(--leading-s);
-    --icon-s-big: calc( var(--leading-s) * 2 );
+    --symbol-s: var(--a-s-medium);
+    --symbol-s-big: calc( var(--a-s-medium) * 2 );
 
 }

@@ -6,40 +6,34 @@ basics configuration
 
     /* base */
 
-    --app-txt-c: var(--a-c-charcoal);
-    --app-bg-c: var(--a-c-white);
-    --app-content-w: 36rem; /* 576px @ 16px */
+    --app-txt-c: var(--a-c-white);
+    --app-bg-c: var(--a-c-darkOrange);
+    --app-bg-gr: linear-gradient(
+        to bottom,
+        var(--a-c-black) 31%,
+        var(--app-bg-c) 65%
+    );
+    --app-content-w: 40.421rem; /* 768px @ 19px */
 
     /* root typography with font sizes for different screens scaling */
 
     --rootFontWeight: 400;
     --rootLineHeight: 1.5;
-    --rootFontFamily: var(--a-font-sourceSansPro);
-    --rootFontSize: 18px;
+    --rootFontFamily: var(--a-font-ptSans);
+    --rootFontSize: 19px;
     --rootFontSizeSmaller: 16px;
-    --rootFontSizeBigger: 20px;
+    --rootFontSizeBigger: 22px;
 
     /* specific elements */
 
-    --line-gr-w: 0.0625rem; /* 1px @ 16px */
-    --line-gr-dotted-c:
-        transparent 0%,
-        transparent 50%,
-        currentColor 50%,
-        currentColor 100%
-    ;
-    --line-gr-solid-c: currentColor 0%, currentColor 0%;
-    --line-gr: linear-gradient( to left, var(--line-gr-solid-c) );
-
-    --focus-outline-c: var(--a-c-amaranth);
+    --focus-outline-c: var(--a-c-darkOrange);
     --focus-outline-w: var(--a-s-tiny);
 
     --selection-txt-c: var(--a-c-white);
-    --selection-bg-c: var(--a-c-amaranth);
+    --selection-bg-c: var(--a-c-darkOrange);
 
     /* reusable stuff */
 
     --disabled-o: var(--a-f-big);
-    --leading-s: calc( var(--rootLineHeight) * 1rem );
 
 }

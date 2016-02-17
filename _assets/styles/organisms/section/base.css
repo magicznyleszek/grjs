@@ -3,9 +3,9 @@ section organism
 ------------------------------------------------------------------------------*/
 
 [gui-o-section]:not(:last-child) {
-    margin-bottom: calc( var(--leading-s) * 2 );
+    margin-bottom: calc( var(--a-s-medium) * 2 );
 }
 
 [gui-o-section~='main']:not(:last-child) {
-    margin-bottom: calc( var(--leading-s) * 3 );
+    margin-bottom: calc( var(--a-s-medium) * 3 );
 }
