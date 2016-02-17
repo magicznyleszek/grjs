@@ -7,8 +7,8 @@
     }
 
     // Subscribes to an event with a callback.
-    // @param {string} name
-    // @param {object Function} callback
+    // @param {string} [name] event name
+    // @param {function} [callback] to be called whenever event is published
     AppBroadcaster.prototype.subscribe = function (name, callback) {
         if (this.subscribers[name] === undefined) {
             this.subscribers[name] = [];
