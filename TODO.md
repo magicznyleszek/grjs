@@ -15,30 +15,53 @@
 
 Details:
 
-- app
++ app
     - init notificationsController
     - init dataKeeper
     - init formController
-- eventer
-    - actions
-    - dispatch
-    - listen
-- notificationsController
-    - create html container for adding
-    - add notification on event
-    - items
-- notificationModel
-    - type: [ error, info, warning ]
-    - message
-    - lifespan
++ eventer
+    + actions
+    + broadcaster (publish, subscribe)
+- notifier
+    - model
+        - type: [ error, info, warning ]
+        - message
+        - id
+    - view
+        - find #container element
+        - add element to html
+        - remove element from html
+    - controller
+        - handle add notification event
+        - create new notification with model (generate id, pass type and message)
+        - add to view
+        - set lifespan
+        - remove from view
 - dataKeeper
-    - create localStorage data object
+    - create localStorage data object if none there
     - save data to localStorage
-- inputModel
-    - validates on lost focus or after some time
-    - sends notification event on error
-- formController
-    - finds all inputs and applies model to them
-    - find submit button
-    - on submit button validate all inputs
-    - save data with dataKeeper if all valid + notify
+    - get data from localStorage (print in console)
+- validator
+    - validate string by length and characters
+- form
+    - model for inputs
+        - validation options
+        - id
+        - isEmpty
+        - isError
+        - isFocused
+    - view
+        - update attributes by input id (is-empty, is-error)
+        - send event on input lost focus
+        - send event on input keyup
+    - controller
+        - has inputs ids list
+        - finds all inputs and applies model to them (bind in view)
+        - on lost focus event validate input
+        - on keyup event validate input after a while (cancel previous)
+        - after validation notify error if necessary
+        - handle submit button
+            - find submit button
+            - on submit button:
+                1. loop through inputs: validate input, (notify error) and go next
+                2. if all valid save data with dataKeeper and notify success
