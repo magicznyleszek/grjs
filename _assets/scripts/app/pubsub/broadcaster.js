@@ -1,10 +1,11 @@
 (function (window) {
+
     'use strict';
 
     // constructor
     var AppBroadcaster = function () {
         this.subscribers = {};
-    }
+    };
 
     // Subscribes to an event with a callback.
     // @param {string} [name] event name

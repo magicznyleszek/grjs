@@ -1,4 +1,5 @@
 // global helpers
+
 'use strict';
 
 // Adds object properties to another object.
@@ -9,4 +10,4 @@ var extend = function (baseObj, addedObj) {
             baseObj[key] = addedObj[key];
         }
     }
-}
+};

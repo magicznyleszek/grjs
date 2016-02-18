@@ -23,17 +23,17 @@ Details:
     + actions
     + broadcaster (publish, subscribe)
 - notifier
-    - model
-        - type: [ error, info, warning ]
-        - message
-        - id
+    + model
+        + type (error, info)
+        + message
+        + generated id
     - view
         - find #container element
-        - add element to html
-        - remove element from html
+        - add element to html method
+        - remove element from html method
     - controller
         - handle add notification event
-        - create new notification with model (generate id, pass type and message)
+        - create new notification with model
         - add to view
         - set lifespan
         - remove from view

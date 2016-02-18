@@ -1,5 +1,7 @@
 describe('pubsub: actions', function () {
 
+    'use strict';
+
     it('should exist', function () {
         expect(app.actions).toBeDefined();
     });

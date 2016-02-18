@@ -1,5 +1,7 @@
 describe('pubsub: broadcaster', function () {
 
+    'use strict';
+
     it('should exist', function () {
         expect(app.broadcaster).toBeDefined();
     });
