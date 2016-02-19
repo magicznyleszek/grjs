@@ -37,12 +37,13 @@ Details:
         + add to view
         + set lifespan
         + remove from view
+- validator
+    - validate string by length
+    - validate string by characters
 - dataKeeper
     - create localStorage data object if none there
     - save data to localStorage
     - get data from localStorage (print in console)
-- validator
-    - validate string by length and characters
 - form
     - model for inputs
         - validation options
