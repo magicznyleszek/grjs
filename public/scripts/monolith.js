@@ -1,4 +1,4 @@
-/* 2016-02-18 */
+/* 2016-02-19 */
 // global helpers
 
 'use strict';
@@ -140,7 +140,7 @@ var app = app || {};
     // export to app
     window.app = window.app || {};
     window.app.notifier = window.app.notifier || {};
-    window.app.notifier.controller = new AppNotifierController;
+    window.app.notifier.controller = new AppNotifierController();
 
 })(window);
 
@@ -150,11 +150,20 @@ var app = app || {};
     'use strict';
 
     // constructor
-    var AppNotifierView = function () {};
+    var AppNotifierView = function () {
+        this._containerId = 'notifierContainer';
+        this._containerEl = document.getElementById(this._containerId);
+    };
+
+    // Creates a new notification instance - returns a node.
+    // @param {object} [element] node to be added
+    AppNotifierView.prototype.addItem = function (element) {
+        
+    };
 
     // export to app
     window.app = window.app || {};
     window.app.notifier = window.app.notifier || {};
-    window.app.notifier.view = new AppNotifierView;
+    window.app.notifier.view = new AppNotifierView();
 
 })(window);
