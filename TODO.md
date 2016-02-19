@@ -16,27 +16,27 @@
 Details:
 
 + app
-    - init notificationsController
+    + init notifier
     - init dataKeeper
-    - init formController
+    - init promoform
 + eventer
     + actions
     + broadcaster (publish, subscribe)
-- notifier
++ notifier
     + model
         + type (error, info)
         + message
         + generated id
-    - view
-        - find #container element
-        - add element to html method
-        - remove element from html method
-    - controller
-        - handle add notification event
-        - create new notification with model
-        - add to view
-        - set lifespan
-        - remove from view
+    + view
+        + find #container element
+        + add element to html method
+        + remove element from html method
+    + controller
+        + handle add notification event
+        + create new notification with model
+        + add to view
+        + set lifespan
+        + remove from view
 - dataKeeper
     - create localStorage data object if none there
     - save data to localStorage

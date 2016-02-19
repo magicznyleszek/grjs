@@ -22,7 +22,7 @@
     AppBroadcaster.prototype.publish = function (name, data) {
         var subsArray = this.subscribers[name];
         if (subsArray === undefined) {
-            console.warn('Tried to publish unknown event:' + name);
+            console.warn('Tried to publish unknown event: ' + name);
         } else {
             for (var i = 0, j = subsArray.length; i < j; i += 1) {
                 subsArray[i]({ name: name }, data);

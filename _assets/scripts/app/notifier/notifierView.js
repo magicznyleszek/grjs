@@ -3,9 +3,9 @@
     'use strict';
 
     // constructor
-    var AppNotifierView = function () {
-        this._containerId = 'notifierContainer';
-        this._containerEl = document.getElementById(this._containerId);
+    // @param {string} [containerId] html id of element container
+    var AppNotifierView = function (containerId) {
+        this._containerEl = document.getElementById(containerId);
     };
 
     // Add child node to container.
@@ -24,6 +24,6 @@
     // export to app
     window.app = window.app || {};
     window.app.notifier = window.app.notifier || {};
-    window.app.notifier.view = new AppNotifierView();
+    window.app.notifier.view = AppNotifierView;
 
 })(window);

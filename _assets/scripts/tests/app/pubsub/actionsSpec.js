@@ -10,4 +10,8 @@ describe('pubsub: actions', function () {
         expect(app.actions.testAction).toBeDefined();
     });
 
+    it('should have an addNotification action', function () {
+        expect(app.actions.addNotification).toBeDefined();
+    });
+
 });

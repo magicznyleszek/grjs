@@ -6,21 +6,33 @@ describe('notifier: view', function () {
         expect(app.notifier.view).toBeDefined();
     });
 
+    beforeEach(function () {
+        // mock container element and view
+        var mockEl = document.createElement('div');
+        mockEl.setAttribute('id', 'fooContainer');
+        document.body.appendChild(mockEl);
+
+        window.mockView = new app.notifier.view('fooContainer');
+    });
+
+    afterEach(function () {
+        var mockViewContainer = window.mockView._containerEl;
+        while (mockViewContainer.firstChild) {
+            mockViewContainer.removeChild(mockViewContainer.firstChild);
+        }
+    });
+
     describe('add method', function () {
 
         it('should exist', function () {
-            expect(app.notifier.view.add).toBeDefined();
+            expect(window.mockView.add).toBeDefined();
         });
 
         it('should create a child in container', function () {
-            // mock container element
-            app.notifier.view._containerEl = document.createElement('div');
-            document.body.appendChild(app.notifier.view._containerEl);
-
             var element = document.createElement('div');
-            app.notifier.view.add(element);
+            window.mockView.add(element);
 
-            var lengthAfter = app.notifier.view._containerEl.children.length;
+            var lengthAfter = window.mockView._containerEl.children.length;
 
             expect(lengthAfter).toEqual(1);
         });
@@ -30,22 +42,21 @@ describe('notifier: view', function () {
     describe('remove method', function () {
 
         it('should exist', function () {
-            expect(app.notifier.view.remove).toBeDefined();
+            expect(window.mockView.remove).toBeDefined();
         });
 
         it('should remove a child in container', function () {
             var elementId = 'foo';
-            // mock container element
-            app.notifier.view._containerEl = document.createElement('div');
-            document.body.appendChild(app.notifier.view._containerEl);
+            var lengthBefore = null;
+            var lengthAfter = null;
 
             var element = document.createElement('div');
             element.setAttribute('id', elementId);
-            app.notifier.view.add(element);
+            window.mockView.add(element);
 
-            var lengthBefore = app.notifier.view._containerEl.children.length;
-            app.notifier.view.remove(elementId);
-            var lengthAfter = app.notifier.view._containerEl.children.length;
+            lengthBefore = window.mockView._containerEl.children.length;
+            window.mockView.remove(elementId);
+            lengthAfter = window.mockView._containerEl.children.length;
 
             expect(lengthBefore).toEqual(1);
             expect(lengthAfter).toEqual(0);

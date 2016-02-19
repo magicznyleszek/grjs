@@ -5,7 +5,8 @@
     // constructor
     var AppActions = function () {
         return {
-            testAction: 'GRJS_TEST_ACTION'
+            testAction: 'GRJS_TEST_ACTION',
+            addNotification: 'GRJS_ADD_NOTIFICATION'
         };
     };
 
