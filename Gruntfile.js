@@ -45,7 +45,10 @@ module.exports = function(grunt) {
                         '_assets/scripts/app/helpers.js',
                         '_assets/scripts/app/app.js',
                         '_assets/scripts/app/pubsub/actions.js',
-                        '_assets/scripts/app/pubsub/broadcaster.js'
+                        '_assets/scripts/app/pubsub/broadcaster.js',
+                        '_assets/scripts/app/notifier/notification.js',
+                        '_assets/scripts/app/notifier/notifierController.js',
+                        '_assets/scripts/app/notifier/notifierView.js'
                     ]
                 }
             }

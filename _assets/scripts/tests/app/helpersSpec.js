@@ -1,5 +1,7 @@
 describe('helpers: extend', function () {
 
+    'use strict';
+
     it('should exist', function () {
         expect(extend).toBeDefined();
     });
