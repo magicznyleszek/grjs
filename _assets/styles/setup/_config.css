@@ -13,7 +13,6 @@ basics configuration
         var(--a-c-black) 31%,
         var(--app-bg-c) 65%
     );
-    --app-content-w: 40.421rem; /* 768px @ 19px */
 
     /* root typography with font sizes for different screens scaling */
 

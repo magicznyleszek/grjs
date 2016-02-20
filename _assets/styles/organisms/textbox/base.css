@@ -1,0 +1,53 @@
+/*------------------------------------------------------------------------------
+textbox organism
+------------------------------------------------------------------------------*/
+
+@import '_config.css';
+
+[gui-o-textbox] {
+    position: relative;
+    width: 100%;
+    display: block;
+}
+
+[gui-o-textbox] textarea {
+    resize: vertical;
+}
+
+[gui-o-textbox] input,
+[gui-o-textbox] textarea {
+    display: block;
+    outline: 0;
+    margin: 0;
+    border: 0;
+
+    width: 100%;
+
+    padding: var(--textbox-padding);
+
+    height: var(--textbox-h);
+    line-height: var(--textbox-leading);
+
+    border-radius: var(--textbox-input-br);
+    color: var(--textbox-input-txt);
+    font-size: var(--textbox-input-fontsize);
+
+    background-image: var(--textbox-input-bg-gr);
+}
+
+[gui-o-textbox] label {
+    position: absolute;
+    z-index: var(--a-z-1);
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    padding: var(--textbox-padding);
+
+    height: var(--textbox-h);
+    line-height: var(--textbox-leading);
+
+    color: var(--textbox-label-txt);
+
+    pointer-events: none;
+}

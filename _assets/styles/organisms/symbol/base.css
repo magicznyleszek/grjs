@@ -8,9 +8,6 @@ symbol organism
     display: inline-block;
     vertical-align: middle;
 
-    height: var(--symbol-s);
-    width: var(--symbol-s);
-
     shape-rendering: geometricPrecision;
 }
 
@@ -18,12 +15,17 @@ symbol organism
 
 [gui-o-symbol] > * { pointer-events: none; }
 
-[gui-o-symbol~='big'] {
-    width: var(--symbol-s-big);
-    height: var(--symbol-s-big);
-}
-
 [gui-o-symbol~='currentColor'] {
     fill: currentColor;
     color: inherit;
+}
+
+
+/*------------------------------------------------------------------------------
+symbol sizes
+------------------------------------------------------------------------------*/
+
+[gui-o-symbol~='e-logo'] {
+    width: var(--symbol-e-logo-w);
+    height: var(--symbol-e-logo-h);
 }

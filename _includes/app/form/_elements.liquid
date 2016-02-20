@@ -1,87 +1,66 @@
-<div>
-    <input
-        type="radio"
-        name="amount"
-        id="ticketsPromoForm-amount-1"
-        value="1"
-        checked
-    >
-    <label for="ticketsPromoForm-amount-1">
-        <span>1 ticket</span>
-        <data value="109.00">€100</data>
-    </label>
+<div gui-m-column="1/2" gui-m-pad="little-r medium-b">
+    <div>
+        <input type="radio" name="amount" id="promoForm-amount-1" value="1" checked>
+        <label for="promoForm-amount-1">
+            <span>1 ticket</span>
+            <data value="109.00">€100</data>
+        </label>
+    </div>
+</div><div gui-m-column="1/2" gui-m-pad="little-l medium-b">
+    <div>
+        <input type="radio" name="amount" id="promoForm-amount-5" value="5">
+        <label for="promoForm-amount-5">
+            <span>5 tickets</span>
+            <data value="495.00">€495</data>
+        </label>
+    </div>
 </div>
 
-<div>
-    <input
-        type="radio"
-        name="amount"
-        id="ticketsPromoForm-amount-5"
-        value="5"
-    >
-    <label for="ticketsPromoForm-amount-5">
-        <span>5 tickets</span>
-        <data value="495.00">€495</data>
-    </label>
+<div gui-m-column="1/2" gui-m-pad="little-r medium-b">
+    <div gui-o-textbox>
+        <input type="text" name="firstName" id="promoForm-firstName">
+        <label for="promoForm-firstName">First name</label>
+    </div>
+</div><div gui-m-column="1/2" gui-m-pad="little-l medium-b">
+    <div gui-o-textbox>
+        <input type="text" name="lastName" id="promoForm-lastName">
+        <label for="promoForm-lastName">Last name</label>
+    </div>
 </div>
 
-<input
-    type="text"
-    name="firstName"
-    id="ticketsPromoForm-firstName"
-    data-placeholder="First name"
-    autofocus
->
+<div gui-m-column="1/2" gui-m-pad="little-r medium-b">
+    <div gui-o-textbox>
+        <textarea name="messageOne" id="promoForm-messageOne" rows="1"></textarea>
+        <label for="promoForm-messageOne">Textarea 1</label>
+    </div>
+</div><div gui-m-column="1/2" gui-m-pad="little-l medium-b">
+    <div gui-o-textbox>
+        <textarea name="messageTwo" id="promoForm-messageTwo" rows="1"></textarea>
+        <label for="promoForm-messageTwo">Textarea 2</label>
+    </div>
+</div>
 
-<input
-    type="text"
-    name="lastName"
-    id="ticketsPromoForm-lastName"
-    data-placeholder="Last name"
->
+<div gui-m-column="1/2" gui-m-pad="little-r huge-b">
+    <div gui-o-textbox>
+        <input type="text" name="email" id="promoForm-email">
+        <label for="promoForm-email">Email</label>
+    </div>
+</div><div gui-m-column="1/2" gui-m-pad="little-l huge-b">
+    <div gui-o-textbox>
+        <input type="password" name="pass" id="promoForm-pass">
+        <label for="promoForm-pass">Password</label>
+    </div>
+</div>
 
-<textarea
-    name="firstMessage"
-    id="ticketsPromoForm-firstMessage"
-    rows="1"
-    data-placeholder="Textarea 1"
-></textarea>
-
-<textarea
-    name="secondMessage"
-    id="ticketsPromoForm-secondMessage"
-    rows="1"
-    data-placeholder="Textarea 2"
-></textarea>
-
-<input
-    type="text"
-    name="email"
-    id="ticketsPromoForm-email"
-    data-placeholder="Email"
->
-
-<input
-    type="password"
-    name="password"
-    id="ticketsPromoForm-password"
-    data-placeholder="Password"
->
-
-<input
-    type="text"
-    name="vid"
-    id="ticketsPromoForm-vid"
-    data-placeholder="VID Number"
->
-
-<div>
-    <input
-        type="text"
-        name="counter"
-        id="ticketsPromoForm-counter"
-    >
-    <label for="ticketsPromoForm-counter">
-        &times; Number of tickets
-    </label>
+<div gui-m-column="1/2" gui-m-columnbefore="1/4" gui-m-columnafter="1/4">
+    <div gui-o-textbox>
+        <input type="text" name="vid" id="promoForm-vid">
+        <label for="promoForm-vid">VID Number</label>
+    </div>
+    <div>
+        <input type="text" name="counter" id="promoForm-counter">
+        <label for="promoForm-counter">
+            &times; Number of tickets
+        </label>
+    </div>
 </div>

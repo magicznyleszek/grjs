@@ -15,10 +15,13 @@ main styles aggregation
 @import 'molecules/column.css';
 @import 'molecules/inlineblock.css';
 @import 'molecules/pad.css';
+@import 'molecules/tableCenter.css';
 @import 'molecules/text.css';
+@import 'molecules/width.css';
 
 /* organisms */
 @import 'organisms/button/base.css';
 @import 'organisms/container/base.css';
 @import 'organisms/section/base.css';
 @import 'organisms/symbol/base.css';
+@import 'organisms/textbox/base.css';

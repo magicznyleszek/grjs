@@ -54,9 +54,6 @@ Details:
     - model for inputs
         - validation options
         - id
-        - isEmpty
-        - isError
-        - isFocused
     - view
         - update attributes by input id (is-empty, is-error)
         - send event on input lost focus
