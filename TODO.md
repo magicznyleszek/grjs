@@ -37,12 +37,19 @@ Details:
         + add to view
         + set lifespan
         + remove from view
++ validator
+    + number range (1-20)
+    + length under (6, 11, 21)
+    + length over (7, 0)
+    + has digits
+    + has no digits
+    + has only digits
+    + has letters
+    + has special characters
 - dataKeeper
     - create localStorage data object if none there
     - save data to localStorage
     - get data from localStorage (print in console)
-- validator
-    - validate string by length and characters
 - form
     - model for inputs
         - validation options
