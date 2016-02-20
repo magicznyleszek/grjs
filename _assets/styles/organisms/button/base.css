@@ -25,12 +25,12 @@ button organism
     border-radius: var(--button-br);
 
     font-size: var(--button-fontsize);
-    font-weight: 700;
+    font-weight: 400;
     font-family: inherit;
     text-align: center;
 
+    text-transform: uppercase;
     text-decoration: none;
-    background-image: none;
 
     overflow: hidden;
     white-space: nowrap;

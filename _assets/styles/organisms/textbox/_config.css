@@ -8,14 +8,15 @@ textbox config
     --textbox-leading: 1.42rem; /* 27px @ 19px */
     --textbox-h: calc(1.42rem + (0.52rem * 2));
 
-    --textbox-input-br: 0.15rem; /* 3px @ 19px */
+    --textbox-input-br: var(--a-s-tiny);
     --textbox-input-txt: var(--a-c-black);
     --textbox-input-fontsize: 1rem; /* 19px */
     --textbox-input-bg-gr: linear-gradient(
         to bottom,
         var(--a-c-white),
-        var(--a-c-darkOrange)
+        color( var(--a-c-darkOrange) tint(60%) )
     );
+
 
     --textbox-label-txt: var(--a-c-suvaGray);
 
