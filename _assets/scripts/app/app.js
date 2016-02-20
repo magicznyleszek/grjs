@@ -2,14 +2,22 @@
 
     'use strict';
 
-    function Notifier(containerId) {
-        this.model = new app.notifier.Notification();
-        this.view = new app.notifier.view(containerId);
-        this.controller = new app.notifier.controller(this.model, this.view);
+    function App(properties) {
+        this.broadcaster = new app.broadcaster(new app.actions);
+        this.validator = new app.validator();
+        this.storage = new app.storage(properties.storageId);
+        this.notifier = new app.notifier.controller(
+            new app.notifier.Notification(),
+            new app.notifier.view(properties.notifierId),
+            this.broadcaster
+        );
     }
 
     window.addEventListener('load', function () {
-        var grjsNotifier = new Notifier('notifierContainer');
+        window.grjs = new App({
+            notifierId: 'notifierContainer',
+            storageId: 'grjs'
+        });
     });
 
 })(window);

@@ -1,31 +1,24 @@
-/* 2016-02-19 */
-// global helpers
-
-'use strict';
-
-// Adds object properties to another object.
-// @param {object} obj
-var extend = function (baseObj, addedObj) {
-    for (var key in addedObj) {
-        if (addedObj.hasOwnProperty(key)) {
-            baseObj[key] = addedObj[key];
-        }
-    }
-};
-
-/* --- */
+/* 2016-02-20 */
 (function (window) {
 
     'use strict';
 
-    function Notifier(containerId) {
-        this.model = new app.notifier.Notification();
-        this.view = new app.notifier.view(containerId);
-        this.controller = new app.notifier.controller(this.model, this.view);
+    function App(properties) {
+        this.broadcaster = new app.broadcaster(new app.actions);
+        this.validator = new app.validator();
+        this.storage = new app.storage(properties.storageId);
+        this.notifier = new app.notifier.controller(
+            new app.notifier.Notification(),
+            new app.notifier.view(properties.notifierId),
+            this.broadcaster
+        );
     }
 
     window.addEventListener('load', function () {
-        var grjsNotifier = new Notifier('notifierContainer');
+        window.grjs = new App({
+            notifierId: 'notifierContainer',
+            storageId: 'grjs'
+        });
     });
 
 })(window);
@@ -45,7 +38,7 @@ var extend = function (baseObj, addedObj) {
 
     // export to app
 	window.app = window.app || {};
-	window.app.actions = new AppActions();
+	window.app.actions = AppActions;
 
 })(window);
 
@@ -55,24 +48,26 @@ var extend = function (baseObj, addedObj) {
     'use strict';
 
     // constructor
-    var AppBroadcaster = function () {
-        this.subscribers = {};
+    // @param {object} [actions] all possible broadcaster actions
+    var AppBroadcaster = function (actions) {
+        this.actions = actions;
+        this._subscribers = {};
     };
 
     // Subscribes to an event with a callback.
     // @param {string} [name] event name
     // @param {function} [callback] to be called whenever event is published
     AppBroadcaster.prototype.subscribe = function (name, callback) {
-        if (this.subscribers[name] === undefined) {
-            this.subscribers[name] = [];
+        if (this._subscribers[name] === undefined) {
+            this._subscribers[name] = [];
         }
-        this.subscribers[name].push(callback);
+        this._subscribers[name].push(callback);
     };
 
     // Publish to an event with a callback.
     // @param {string} name
     AppBroadcaster.prototype.publish = function (name, data) {
-        var subsArray = this.subscribers[name];
+        var subsArray = this._subscribers[name];
         if (subsArray === undefined) {
             console.warn('Tried to publish unknown event: ' + name);
         } else {
@@ -84,7 +79,129 @@ var extend = function (baseObj, addedObj) {
 
     // export to app
 	window.app = window.app || {};
-	window.app.broadcaster = new AppBroadcaster();
+	window.app.broadcaster = AppBroadcaster;
+
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
+    var AppStorage = function (namespace) {
+        this._namespace = namespace;
+        this._prepareStorage(this._namespace);
+    };
+
+    // Creates a namespaced localStorage item.
+    // @param {string} [namespace] localStorage item name
+    AppStorage.prototype._prepareStorage = function (namespace) {
+        window.localStorage.setItem(namespace, this._toJson([]));
+    };
+
+    // Saves new data to the storage.
+    // @param {string} [testString] string to be tested
+    AppStorage.prototype.addData = function (data) {
+        var dataArray = this.getAllData();
+        dataArray.push(data);
+        window.localStorage.setItem(this._namespace, this._toJson(dataArray));
+    };
+
+    // Returns all saved data.
+    AppStorage.prototype.getAllData = function () {
+        var storageJson = window.localStorage.getItem(this._namespace);
+        return this._fromJson(storageJson);
+    };
+
+    // Converts data to JSON string.
+    // @param {object} [data] object to be jsonified
+    AppStorage.prototype._toJson = function (data) {
+        return JSON.stringify(data);
+    };
+
+    // Reads data from JSON string.
+    // @param {object} [json] object to be jsonified
+    AppStorage.prototype._fromJson = function (json) {
+        return JSON.parse(json);
+    };
+
+    // export to app
+    window.app = window.app || {};
+    window.app.storage = AppStorage;
+
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
+    var AppValidator = function () {};
+
+    // Checks if string contains any digit characters.
+    // @param {string} [testString] string to be tested
+    AppValidator.prototype.testHasDigits = function (testString) {
+        var re = new RegExp('\\d', 'g');
+        return re.test(testString);
+    };
+
+    // Check if string contains no digit characters.
+    // @param {string} [testString] string to be tested
+    AppValidator.prototype.testHasNoDigits = function (testString) {
+        var re = new RegExp('^([^0-9]*)$', 'g');
+        return re.test(testString);
+    };
+
+    // Check if string has only digit characters.
+    // @param {string} [testString] string to be tested
+    AppValidator.prototype.testHasOnlyDigits = function (testString) {
+        var re = new RegExp('^[0-9]+$', 'g');
+        return re.test(testString);
+    };
+
+    // Checks if string contains any letter characters.
+    // @param {string} [testString] string to be tested
+    AppValidator.prototype.testHasLetters = function (testString) {
+        var re = new RegExp('[a-zA-Z\\u00C0-\\u017F]', 'g');
+        return re.test(testString);
+    };
+
+    // Checks if string contains any special characters.
+    // @param {string} [testString] string to be tested
+    AppValidator.prototype.testHasSpecials = function (testString) {
+        var re = new RegExp('[^a-zA-Z\\d\\s:]', 'g');
+        return re.test(testString);
+    };
+
+    // Checks if string is longer than given limit.
+    // @param {string} [testString] string to be tested
+    // @param {integer} {limit} that string needs to be longer than
+    AppValidator.prototype.testLengthOver = function (testString, limit) {
+        return testString.length > limit;
+    };
+
+    // Checks if string is shorter than given limit.
+    // @param {string} [testString] string to be tested
+    // @param {integer} {limit} that string needs to be shorter than
+    AppValidator.prototype.testLengthUnder = function (testString, limit) {
+        return testString.length < limit;
+    };
+
+    // Check if number is withing a range (with edges).
+    // @param {integer} [testNumber] number to be tested
+    // @param {integer} [min] bottom edge
+    // @param {integer} [max] top edge
+    AppValidator.prototype.testNumberRange = function (testNumber, min, max) {
+        var isOverMin = testNumber >= min;
+        var isUnderMax = testNumber <= max;
+        return isOverMin && isUnderMax;
+    };
+
+    // export to app
+	window.app = window.app || {};
+	window.app.validator = AppValidator;
 
 })(window);
 
@@ -149,7 +266,7 @@ var extend = function (baseObj, addedObj) {
     'use strict';
 
     // constructor
-    var AppNotifierController = function (model, view) {
+    var AppNotifierController = function (model, view, broadcaster) {
         // safety checks
         if (model === undefined) {
             throw new Error('Tried to create modelless controller.');
@@ -157,13 +274,17 @@ var extend = function (baseObj, addedObj) {
         if (view === undefined) {
             throw new Error('Tried to create viewless controller.');
         }
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless controller.');
+        }
         this.model = model;
         this.view = view;
+        this.broadcaster = broadcaster;
 
         this._notificationLifespan = 2 * 1000; // 2s
 
-        app.broadcaster.subscribe(
-            app.actions.addNotification,
+        this.broadcaster.subscribe(
+            this.broadcaster.actions.addNotification,
             this._onAddNotification.bind(this)
         );
     };
@@ -219,7 +340,7 @@ var extend = function (baseObj, addedObj) {
 
     // constructor
     // @param {string} [containerId] html id of element container
-    var AppNotifierView = function ( containerId ) {
+    var AppNotifierView = function (containerId) {
         this._containerEl = document.getElementById(containerId);
     };
 

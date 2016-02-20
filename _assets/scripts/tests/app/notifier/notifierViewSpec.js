@@ -2,10 +2,6 @@ describe('notifier: view', function () {
 
     'use strict';
 
-    it('should exist', function () {
-        expect(app.notifier.view).toBeDefined();
-    });
-
     beforeEach(function () {
         // mock container element and view
         var mockEl = document.createElement('div');
@@ -22,6 +18,10 @@ describe('notifier: view', function () {
         }
     });
 
+    it('should exist', function () {
+        expect(app.notifier.view).toBeDefined();
+    });
+
     describe('add method', function () {
 
         it('should exist', function () {
@@ -29,12 +29,8 @@ describe('notifier: view', function () {
         });
 
         it('should create a child in container', function () {
-            var element = document.createElement('div');
-            window.mockView.add(element);
-
-            var lengthAfter = window.mockView._containerEl.children.length;
-
-            expect(lengthAfter).toEqual(1);
+            window.mockView.add(document.createElement('div'));
+            expect(window.mockView._containerEl.children.length).toEqual(1);
         });
 
     });
