@@ -30,47 +30,87 @@
 
 <div gui-m-column="1/2" gui-m-pad="little-r medium-b">
     <div gui-o-textbox>
-        <input type="text" name="firstName" id="promoForm-firstName">
+        <input
+            type="text"
+            name="firstName"
+            id="promoForm-firstName"
+            data-validatorType="person"
+        >
         <label for="promoForm-firstName">First name</label>
     </div>
 </div><div gui-m-column="1/2" gui-m-pad="little-l medium-b">
     <div gui-o-textbox>
-        <input type="text" name="lastName" id="promoForm-lastName">
+        <input
+            type="text"
+            name="lastName"
+            id="promoForm-lastName"
+            data-validatorType="person"
+        >
         <label for="promoForm-lastName">Last name</label>
     </div>
 </div>
 
 <div gui-m-column="1/2" gui-m-pad="little-r medium-b">
     <div gui-o-textbox>
-        <textarea name="messageOne" id="promoForm-messageOne" rows="1"></textarea>
+        <textarea
+            name="messageOne"
+            id="promoForm-messageOne"
+            rows="1"
+            data-validatorType="text10"
+        ></textarea>
         <label for="promoForm-messageOne">Textarea 1</label>
     </div>
 </div><div gui-m-column="1/2" gui-m-pad="little-l medium-b">
     <div gui-o-textbox>
-        <textarea name="messageTwo" id="promoForm-messageTwo" rows="1"></textarea>
+        <textarea
+            name="messageTwo"
+            id="promoForm-messageTwo"
+            rows="1"
+            data-validatorType="text20"
+        ></textarea>
         <label for="promoForm-messageTwo">Textarea 2</label>
     </div>
 </div>
 
 <div gui-m-column="1/2" gui-m-pad="little-r huge-b">
     <div gui-o-textbox>
-        <input type="text" name="email" id="promoForm-email">
+        <input
+            type="text"
+            name="email"
+            id="promoForm-email"
+            data-validatorType="email"
+        >
         <label for="promoForm-email">Email</label>
     </div>
 </div><div gui-m-column="1/2" gui-m-pad="little-l huge-b">
     <div gui-o-textbox>
-        <input type="password" name="pass" id="promoForm-pass">
+        <input
+            type="password"
+            name="pass"
+            id="promoForm-pass"
+            data-validatorType="password"
+        >
         <label for="promoForm-pass">Password</label>
     </div>
 </div>
 
 <div gui-m-column="1/2" gui-m-columnbefore="1/4" gui-m-columnafter="1/4">
     <div gui-o-textbox>
-        <input type="text" name="vid" id="promoForm-vid">
+        <input
+            type="text"
+            name="vid"
+            id="promoForm-vid"
+            data-validatorType="vid"
+        >
         <label for="promoForm-vid">VID Number</label>
     </div>
     <div>
-        <input type="text" name="counter" id="promoForm-counter">
+        <input
+            type="text"
+            name="counter"
+            id="promoForm-counter"
+            data-validatorType="counter20"
+        >
         <label for="promoForm-counter">
             &times; Number of tickets
         </label>

@@ -12,11 +12,17 @@
             new app.notifier.view(properties.notifierId),
             this.broadcaster
         );
+        this.form = new app.form.controller(
+            new app.form.Input(),
+            new app.form.view(formId),
+            this.broadcaster
+        );
     }
 
     window.addEventListener('load', function () {
         window.grjs = new App({
             notifierId: 'notifierContainer',
+            formId: 'promoForm',
             storageId: 'grjs'
         });
     });
@@ -266,6 +272,37 @@
     'use strict';
 
     // constructor
+    // @param {string} [containerId] html id of element container
+    var AppNotifierView = function (containerId) {
+        this._containerEl = document.getElementById(containerId);
+    };
+
+    // Add child node to container.
+    // @param {object} [element] node to be added
+    AppNotifierView.prototype.add = function (element) {
+        this._containerEl.appendChild(element);
+    };
+
+    // Remove child node from container by it's id.
+    // @param {string} [id] of node to be removed
+    AppNotifierView.prototype.remove = function (id) {
+        var targetEl = document.getElementById(id);
+        this._containerEl.removeChild(targetEl);
+    };
+
+    // export to app
+    window.app = window.app || {};
+    window.app.notifier = window.app.notifier || {};
+    window.app.notifier.view = AppNotifierView;
+
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
     var AppNotifierController = function (model, view, broadcaster) {
         // safety checks
         if (model === undefined) {
@@ -339,27 +376,51 @@
     'use strict';
 
     // constructor
-    // @param {string} [containerId] html id of element container
-    var AppNotifierView = function (containerId) {
-        this._containerEl = document.getElementById(containerId);
-    };
+    var AppInput = function () {};
 
-    // Add child node to container.
-    // @param {object} [element] node to be added
-    AppNotifierView.prototype.add = function (element) {
-        this._containerEl.appendChild(element);
-    };
+    // export to app
+    window.app = window.app || {};
+    window.app.form = window.app.form || {};
+    window.app.form.Input = AppInput;
 
-    // Remove child node from container by it's id.
-    // @param {string} [id] of node to be removed
-    AppNotifierView.prototype.remove = function (id) {
-        var targetEl = document.getElementById(id);
-        this._containerEl.removeChild(targetEl);
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
+    var AppFormView = function () {};
+
+    // export to app
+    window.app = window.app || {};
+    window.app.form = window.app.form || {};
+    window.app.form.view = AppFormView;
+
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
+    var AppFormController = function () {
+        this._validatorTypes = {
+            person: function () {},
+            text10: function () {},
+            text20: function () {},
+            email: function () {},
+            password: function () {},
+            vid: function () {},
+            counter20: function () {}
+        };
     };
 
     // export to app
     window.app = window.app || {};
-    window.app.notifier = window.app.notifier || {};
-    window.app.notifier.view = AppNotifierView;
+    window.app.form = window.app.form || {};
+    window.app.form.controller = AppFormController;
 
 })(window);

@@ -46,6 +46,7 @@ Details:
     + has only digits
     + has letters
     + has special characters
+    - email
 + storage
     + create localStorage data object if none there
     + save data to localStorage

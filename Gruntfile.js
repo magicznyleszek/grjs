@@ -48,8 +48,11 @@ module.exports = function(grunt) {
                         '_assets/scripts/app/storage.js',
                         '_assets/scripts/app/validator.js',
                         '_assets/scripts/app/notifier/notification.js',
+                        '_assets/scripts/app/notifier/notifierView.js',
                         '_assets/scripts/app/notifier/notifierController.js',
-                        '_assets/scripts/app/notifier/notifierView.js'
+                        '_assets/scripts/app/form/input.js',
+                        '_assets/scripts/app/form/formView.js',
+                        '_assets/scripts/app/form/formController.js'
                     ]
                 }
             }
