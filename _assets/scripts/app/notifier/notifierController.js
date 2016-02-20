@@ -3,7 +3,7 @@
     'use strict';
 
     // constructor
-    var AppNotifierController = function (model, view) {
+    var AppNotifierController = function (model, view, broadcaster) {
         // safety checks
         if (model === undefined) {
             throw new Error('Tried to create modelless controller.');
@@ -11,13 +11,17 @@
         if (view === undefined) {
             throw new Error('Tried to create viewless controller.');
         }
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless controller.');
+        }
         this.model = model;
         this.view = view;
+        this.broadcaster = broadcaster;
 
         this._notificationLifespan = 2 * 1000; // 2s
 
-        app.broadcaster.subscribe(
-            app.actions.addNotification,
+        this.broadcaster.subscribe(
+            this.broadcaster.actions.addNotification,
             this._onAddNotification.bind(this)
         );
     };

@@ -2,10 +2,6 @@ describe('notifier: controller', function () {
 
     'use strict';
 
-    it('should exist', function () {
-        expect(app.notifier.controller).toBeDefined();
-    });
-
     beforeEach(function () {
         // mock container element and view
         var mockEl = document.createElement('div');
@@ -15,7 +11,8 @@ describe('notifier: controller', function () {
         spyOn(app.notifier.controller.prototype, '_onAddNotification');
         window.mockCtrl = new app.notifier.controller(
             new app.notifier.Notification(),
-            new app.notifier.view('fooContainer')
+            new app.notifier.view('fooContainer'),
+            new app.broadcaster(new app.actions()),
         );
 
         jasmine.clock().install();
@@ -28,6 +25,10 @@ describe('notifier: controller', function () {
         }
 
         jasmine.clock().uninstall();
+    });
+
+    it('should exist', function () {
+        expect(app.notifier.controller).toBeDefined();
     });
 
     it('should react to addNotification event', function () {

@@ -2,21 +2,26 @@ describe('validator', function () {
 
     'use strict';
 
+    beforeEach(function () {
+        window.mockValidator = new app.validator();
+    });
+
     it('should exist', function () {
-        expect(app.validator).toBeDefined();
+        expect(window.mockValidator).toBeDefined();
     });
 
     describe('testHasDigits method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testHasDigits).toBeDefined();
+            expect(window.mockValidator.testHasDigits).toBeDefined();
         });
 
         it('should fail for empty', function () {
-            expect(app.validator.testHasDigits('')).toBeFalsy();
+            expect(window.mockValidator.testHasDigits('')).toBeFalsy();
         });
 
         it('should fail for string without digits', function () {
+            var testFunc = window.mockValidator.testHasDigits;
             var strings = [
                 'pójdźże, kiń tę chmurność w głąb flaszy',
                 'pterodactyl porn',
@@ -24,11 +29,12 @@ describe('validator', function () {
                 '~!@#$%^&*()_+'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasDigits(strings[i])).toBeFalsy();
+                expect(testFunc(strings[i])).toBeFalsy();
             }
         });
 
         it('should succeed for string with digits', function () {
+            var testFunc = window.mockValidator.testHasDigits;
             var strings = [
                 'wziąłbym 1 pęczek lub 7 gwoździków',
                 'pr0n',
@@ -36,7 +42,7 @@ describe('validator', function () {
                 '~!@345^&*90-+'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasDigits(strings[i])).toBeTruthy();
+                expect(testFunc(strings[i])).toBeTruthy();
             }
         });
 
@@ -45,10 +51,11 @@ describe('validator', function () {
     describe('testHasNoDigits method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testHasNoDigits).toBeDefined();
+            expect(window.mockValidator.testHasNoDigits).toBeDefined();
         });
 
         it('should succeed for string without digits', function () {
+            var testFunc = window.mockValidator.testHasNoDigits;
             var strings = [
                 'pójdźże, kiń tę chmurność w głąb flaszy',
                 'pterodactyl porn',
@@ -56,11 +63,12 @@ describe('validator', function () {
                 '~!@#$%^&*()_+'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasNoDigits(strings[i])).toBeTruthy();
+                expect(testFunc(strings[i])).toBeTruthy();
             }
         });
 
         it('should fail for string with digits', function () {
+            var testFunc = window.mockValidator.testHasNoDigits;
             var strings = [
                 'wziąłbym 1 pęczek lub 7 gwoździków',
                 'pr0n',
@@ -68,7 +76,7 @@ describe('validator', function () {
                 '~!@345^&*90-+'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasNoDigits(strings[i])).toBeFalsy();
+                expect(testFunc(strings[i])).toBeFalsy();
             }
         });
 
@@ -77,10 +85,11 @@ describe('validator', function () {
     describe('testHasOnlyDigits method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testHasOnlyDigits).toBeDefined();
+            expect(window.mockValidator.testHasOnlyDigits).toBeDefined();
         });
 
         it('should fail for string with non-digit characters', function () {
+            var testFunc = window.mockValidator.testHasOnlyDigits;
             var strings = [
                 'pójdźże, kiń tę chmurność w głąb flaszy',
                 'pterodactyl porn',
@@ -90,18 +99,19 @@ describe('validator', function () {
                 '3,14'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasOnlyDigits(strings[i])).toBeFalsy();
+                expect(testFunc(strings[i])).toBeFalsy();
             }
         });
 
         it('should succeed for string with digits only', function () {
+            var testFunc = window.mockValidator.testHasOnlyDigits;
             var strings = [
                 '1337',
                 '2345678831265698657432',
                 '1'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasOnlyDigits(strings[i])).toBeTruthy();
+                expect(testFunc(strings[i])).toBeTruthy();
             }
         });
 
@@ -110,14 +120,15 @@ describe('validator', function () {
     describe('testHasLetters method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testHasLetters).toBeDefined();
+            expect(window.mockValidator.testHasLetters).toBeDefined();
         });
 
         it('should fail for empty', function () {
-            expect(app.validator.testHasLetters('')).toBeFalsy();
+            expect(window.mockValidator.testHasLetters('')).toBeFalsy();
         });
 
         it('should fail for string without letters', function () {
+            var testFunc = window.mockValidator.testHasLetters;
             var strings = [
                 '#666',
                 '1337 747434 15 783 8055',
@@ -125,11 +136,12 @@ describe('validator', function () {
                 '~!@#$%^&*()_+'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasLetters(strings[i])).toBeFalsy();
+                expect(testFunc(strings[i])).toBeFalsy();
             }
         });
 
         it('should succeed for string with letters', function () {
+            var testFunc = window.mockValidator.testHasLetters;
             var strings = [
                 'wziąłbym 1 pęczek lub 7 gwoździków',
                 'pr0n',
@@ -137,7 +149,7 @@ describe('validator', function () {
                 '~!@345^&*9O-+'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasLetters(strings[i])).toBeTruthy();
+                expect(testFunc(strings[i])).toBeTruthy();
             }
         });
 
@@ -146,14 +158,15 @@ describe('validator', function () {
     describe('testHasSpecials method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testHasSpecials).toBeDefined();
+            expect(window.mockValidator.testHasSpecials).toBeDefined();
         });
 
         it('should fail for empty', function () {
-            expect(app.validator.testHasSpecials('')).toBeFalsy();
+            expect(window.mockValidator.testHasSpecials('')).toBeFalsy();
         });
 
         it('should fail for string without specials', function () {
+            var testFunc = window.mockValidator.testHasSpecials;
             var strings = [
                 'pterodactyl pr0n',
                 '1337 747434 15 783 8055',
@@ -161,11 +174,12 @@ describe('validator', function () {
                 'qwertyuiop'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasSpecials(strings[i])).toBeFalsy();
+                expect(testFunc(strings[i])).toBeFalsy();
             }
         });
 
         it('should succeed for string with specials', function () {
+            var testFunc = window.mockValidator.testHasSpecials;
             var strings = [
                 'wziąłbym 1 pęczek lub 7+ gwoździków',
                 '8=D(|)',
@@ -173,7 +187,7 @@ describe('validator', function () {
                 '~!@345^&*9O-+'
             ];
             for (var i = 0; i < strings.length; i += 1) {
-                expect(app.validator.testHasSpecials(strings[i])).toBeTruthy();
+                expect(testFunc(strings[i])).toBeTruthy();
             }
         });
 
@@ -182,28 +196,31 @@ describe('validator', function () {
     describe('testLengthOver method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testLengthOver).toBeDefined();
+            expect(window.mockValidator.testLengthOver).toBeDefined();
         });
 
         it('should fail for equal length string', function () {
-            expect(app.validator.testLengthOver('~!@345^&*9O-+', 13)).toBeFalsy();
-            expect(app.validator.testLengthOver('8=D(|)', 6)).toBeFalsy();
-            expect(app.validator.testLengthOver('pr0n', 4)).toBeFalsy();
-            expect(app.validator.testLengthOver('', 0)).toBeFalsy();
+            var testFunc = window.mockValidator.testLengthOver;
+            expect(testFunc('~!@345^&*9O-+', 13)).toBeFalsy();
+            expect(testFunc('8=D(|)', 6)).toBeFalsy();
+            expect(testFunc('pr0n', 4)).toBeFalsy();
+            expect(testFunc('', 0)).toBeFalsy();
         });
 
         it('should fail for shorter string', function () {
-            expect(app.validator.testLengthOver('~!@345^&*9O-+', 14)).toBeFalsy();
-            expect(app.validator.testLengthOver('8=D(|)', 99)).toBeFalsy();
-            expect(app.validator.testLengthOver('pr0n', 100)).toBeFalsy();
-            expect(app.validator.testLengthOver('', 897659876)).toBeFalsy();
+            var testFunc = window.mockValidator.testLengthOver;
+            expect(testFunc('~!@345^&*9O-+', 14)).toBeFalsy();
+            expect(testFunc('8=D(|)', 99)).toBeFalsy();
+            expect(testFunc('pr0n', 100)).toBeFalsy();
+            expect(testFunc('', 897659876)).toBeFalsy();
         });
 
         it('should succeed for longer string', function () {
-            expect(app.validator.testLengthOver('~!@345^&*9O-+', 12)).toBeTruthy();
-            expect(app.validator.testLengthOver('8=D(|)', 1)).toBeTruthy();
-            expect(app.validator.testLengthOver('pr0n', 2)).toBeTruthy();
-            expect(app.validator.testLengthOver('', -1)).toBeTruthy();
+            var testFunc = window.mockValidator.testLengthOver;
+            expect(testFunc('~!@345^&*9O-+', 12)).toBeTruthy();
+            expect(testFunc('8=D(|)', 1)).toBeTruthy();
+            expect(testFunc('pr0n', 2)).toBeTruthy();
+            expect(testFunc('', -1)).toBeTruthy();
         });
 
     });
@@ -211,28 +228,31 @@ describe('validator', function () {
     describe('testLengthUnder method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testLengthUnder).toBeDefined();
+            expect(window.mockValidator.testLengthUnder).toBeDefined();
         });
 
         it('should fail for equal length string', function () {
-            expect(app.validator.testLengthUnder('~!@345^&*9O-+', 13)).toBeFalsy();
-            expect(app.validator.testLengthUnder('8=D(|)', 6)).toBeFalsy();
-            expect(app.validator.testLengthUnder('pr0n', 4)).toBeFalsy();
-            expect(app.validator.testLengthUnder('', 0)).toBeFalsy();
+            var testFunc = window.mockValidator.testLengthUnder;
+            expect(testFunc('~!@345^&*9O-+', 13)).toBeFalsy();
+            expect(testFunc('8=D(|)', 6)).toBeFalsy();
+            expect(testFunc('pr0n', 4)).toBeFalsy();
+            expect(testFunc('', 0)).toBeFalsy();
         });
 
         it('should fail for longer string', function () {
-            expect(app.validator.testLengthUnder('~!@345^&*9O-+', 12)).toBeFalsy();
-            expect(app.validator.testLengthUnder('8=D(|)', 1)).toBeFalsy();
-            expect(app.validator.testLengthUnder('pr0n', 2)).toBeFalsy();
-            expect(app.validator.testLengthUnder('', -1)).toBeFalsy();
+            var testFunc = window.mockValidator.testLengthUnder;
+            expect(testFunc('~!@345^&*9O-+', 12)).toBeFalsy();
+            expect(testFunc('8=D(|)', 1)).toBeFalsy();
+            expect(testFunc('pr0n', 2)).toBeFalsy();
+            expect(testFunc('', -1)).toBeFalsy();
         });
 
         it('should succeed for shorter string', function () {
-            expect(app.validator.testLengthUnder('~!@345^&*9O-+', 14)).toBeTruthy();
-            expect(app.validator.testLengthUnder('8=D(|)', 99)).toBeTruthy();
-            expect(app.validator.testLengthUnder('pr0n', 100)).toBeTruthy();
-            expect(app.validator.testLengthUnder('', 897659876)).toBeTruthy();
+            var testFunc = window.mockValidator.testLengthUnder;
+            expect(testFunc('~!@345^&*9O-+', 14)).toBeTruthy();
+            expect(testFunc('8=D(|)', 99)).toBeTruthy();
+            expect(testFunc('pr0n', 100)).toBeTruthy();
+            expect(testFunc('', 897659876)).toBeTruthy();
         });
 
     });
@@ -240,35 +260,39 @@ describe('validator', function () {
     describe('testNumberRange method', function () {
 
         it('should exist', function () {
-            expect(app.validator.testNumberRange).toBeDefined();
+            expect(window.mockValidator.testNumberRange).toBeDefined();
         });
 
         it('should succeed for number within range', function () {
-            expect(app.validator.testNumberRange(0,-3,3)).toBeTruthy();
-            expect(app.validator.testNumberRange(133,89,34567)).toBeTruthy();
-            expect(app.validator.testNumberRange(2,1,3)).toBeTruthy();
-            expect(app.validator.testNumberRange(11,10,12)).toBeTruthy();
+            var testFunc = window.mockValidator.testNumberRange;
+            expect(testFunc(0,-3,3)).toBeTruthy();
+            expect(testFunc(133,89,34567)).toBeTruthy();
+            expect(testFunc(2,1,3)).toBeTruthy();
+            expect(testFunc(11,10,12)).toBeTruthy();
         });
 
         it('should succeed for number on the edge', function () {
-            expect(app.validator.testNumberRange(-3,-3,3)).toBeTruthy();
-            expect(app.validator.testNumberRange(89,89,34567)).toBeTruthy();
-            expect(app.validator.testNumberRange(3,1,3)).toBeTruthy();
-            expect(app.validator.testNumberRange(12,10,12)).toBeTruthy();
+            var testFunc = window.mockValidator.testNumberRange;
+            expect(testFunc(-3,-3,3)).toBeTruthy();
+            expect(testFunc(89,89,34567)).toBeTruthy();
+            expect(testFunc(3,1,3)).toBeTruthy();
+            expect(testFunc(12,10,12)).toBeTruthy();
         });
 
         it('should fail for number under range', function () {
-            expect(app.validator.testNumberRange(-6,-3,3)).toBeFalsy();
-            expect(app.validator.testNumberRange(88,89,34567)).toBeFalsy();
-            expect(app.validator.testNumberRange(0,1,3)).toBeFalsy();
-            expect(app.validator.testNumberRange(9,10,12)).toBeFalsy();
+            var testFunc = window.mockValidator.testNumberRange;
+            expect(testFunc(-6,-3,3)).toBeFalsy();
+            expect(testFunc(88,89,34567)).toBeFalsy();
+            expect(testFunc(0,1,3)).toBeFalsy();
+            expect(testFunc(9,10,12)).toBeFalsy();
         });
 
         it('should fail for number over range', function () {
-            expect(app.validator.testNumberRange(4,-3,3)).toBeFalsy();
-            expect(app.validator.testNumberRange(34568,89,34567)).toBeFalsy();
-            expect(app.validator.testNumberRange(4,1,3)).toBeFalsy();
-            expect(app.validator.testNumberRange(13,10,12)).toBeFalsy();
+            var testFunc = window.mockValidator.testNumberRange;
+            expect(testFunc(4,-3,3)).toBeFalsy();
+            expect(testFunc(34568,89,34567)).toBeFalsy();
+            expect(testFunc(4,1,3)).toBeFalsy();
+            expect(testFunc(13,10,12)).toBeFalsy();
         });
 
     });

@@ -66,6 +66,6 @@
 
     // export to app
 	window.app = window.app || {};
-	window.app.validator = new AppValidator();
+	window.app.validator = AppValidator;
 
 })(window);

@@ -12,6 +12,6 @@
 
     // export to app
 	window.app = window.app || {};
-	window.app.actions = new AppActions();
+	window.app.actions = AppActions;
 
 })(window);

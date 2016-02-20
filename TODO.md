@@ -46,10 +46,10 @@ Details:
     + has only digits
     + has letters
     + has special characters
-- dataKeeper
-    - create localStorage data object if none there
-    - save data to localStorage
-    - get data from localStorage (print in console)
++ storage
+    + create localStorage data object if none there
+    + save data to localStorage
+    + get data from localStorage
 - form
     - model for inputs
         - validation options

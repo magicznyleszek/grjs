@@ -3,24 +3,26 @@
     'use strict';
 
     // constructor
-    var AppBroadcaster = function () {
-        this.subscribers = {};
+    // @param {object} [actions] all possible broadcaster actions
+    var AppBroadcaster = function (actions) {
+        this.actions = actions;
+        this._subscribers = {};
     };
 
     // Subscribes to an event with a callback.
     // @param {string} [name] event name
     // @param {function} [callback] to be called whenever event is published
     AppBroadcaster.prototype.subscribe = function (name, callback) {
-        if (this.subscribers[name] === undefined) {
-            this.subscribers[name] = [];
+        if (this._subscribers[name] === undefined) {
+            this._subscribers[name] = [];
         }
-        this.subscribers[name].push(callback);
+        this._subscribers[name].push(callback);
     };
 
     // Publish to an event with a callback.
     // @param {string} name
     AppBroadcaster.prototype.publish = function (name, data) {
-        var subsArray = this.subscribers[name];
+        var subsArray = this._subscribers[name];
         if (subsArray === undefined) {
             console.warn('Tried to publish unknown event: ' + name);
         } else {
@@ -32,6 +34,6 @@
 
     // export to app
 	window.app = window.app || {};
-	window.app.broadcaster = new AppBroadcaster();
+	window.app.broadcaster = AppBroadcaster;
 
 })(window);

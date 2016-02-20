@@ -2,20 +2,28 @@ describe('pubsub: broadcaster', function () {
 
     'use strict';
 
+    beforeEach(function () {
+        window.mockBroadcaster = new app.broadcaster(new app.actions);
+    });
+
+    afterEach(function () {
+        window.mockBroadcaster = null;
+    });
+
     it('should exist', function () {
-        expect(app.broadcaster).toBeDefined();
+        expect(window.mockBroadcaster).toBeDefined();
     });
 
     describe('subscribe method', function () {
 
         it('should exist', function () {
-            expect(app.broadcaster.subscribe).toBeDefined();
+            expect(window.mockBroadcaster.subscribe).toBeDefined();
         });
 
         it('should save event callbacks', function () {
-            var callback = function () { return true; };
-            app.broadcaster.subscribe('testAction', callback);
-            expect(app.broadcaster.subscribers['testAction'][0]).toEqual(callback);
+            var callback = function () {};
+            window.mockBroadcaster.subscribe('testAction', callback);
+            expect(window.mockBroadcaster._subscribers['testAction'][0]).toEqual(callback);
         });
 
     });
@@ -23,17 +31,15 @@ describe('pubsub: broadcaster', function () {
     describe('publish method', function () {
 
         it('should exist', function () {
-            expect(app.broadcaster.publish).toBeDefined();
+            expect(window.mockBroadcaster.publish).toBeDefined();
         });
 
         it('should pass data to subscriber\`s callback', function () {
             var finalData = {};
-            var testData = {
-                foo: 'bar'
-            };
+            var testData = { foo: 'bar' };
             var callback = function (event, data) { finalData = data; };
-            app.broadcaster.subscribe('fooBarAction', callback);
-            app.broadcaster.publish('fooBarAction', testData);
+            window.mockBroadcaster.subscribe('fooBarAction', callback);
+            window.mockBroadcaster.publish('fooBarAction', testData);
             expect(finalData.foo).toEqual(testData.foo);
         });
 
