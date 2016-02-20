@@ -38,11 +38,12 @@ Details:
         + set lifespan
         + remove from view
 - validator
-    - digits amount (100%, 0)
     - number range (1-20)
     - length under (6, 11, 21)
     - length over (7, 0)
     - has digits
+    - has no digits
+    - has only digits
     - has letters
     - has special characters
 - dataKeeper
