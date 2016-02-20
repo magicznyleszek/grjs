@@ -1,0 +1,14 @@
+/*------------------------------------------------------------------------------
+gradient config
+------------------------------------------------------------------------------*/
+
+:root {
+
+    --gradient-background-h: 47.37rem; /* 900px @ 19px */
+    --gradient-black-orange: linear-gradient(
+        to bottom,
+        var(--a-c-black) 49%,
+        var(--a-c-darkOrange)
+    );
+
+}

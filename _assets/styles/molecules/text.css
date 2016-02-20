@@ -27,3 +27,11 @@ text molecule
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+/* colors */
+[gui-m-text~='darkOrange'] { color: var(--a-c-darkOrange); }
+
+/* custom sizes */
+[gui-m-text~='s-55'] { font-size: calc(calc(55/19) * 1rem); }
+[gui-m-text~='s-33'] { font-size: calc(calc(33/19) * 1rem); }
+[gui-m-text~='s-25'] { font-size: calc(calc(25/19) * 1rem); }

@@ -4,18 +4,13 @@ base typographic rules
 
 :--headers {
     font-size: inherit;
+    font-weight: inherit;
     line-height: 1;
     margin: 0;
     padding: 0;
 }
 
 :--textblocks { margin: 0; }
-
-h1 {
-    font-size: 2.84rem; /* 54px @ 19px */
-    font-weight: 700;
-    text-transform: uppercase;
-}
 
 p, pre { margin: 0; }
 

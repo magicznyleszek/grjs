@@ -12,10 +12,8 @@ html {
     text-rendering: optimizeLegibility;
 
     color: var(--app-txt-c);
-    background-image: var(--app-bg-gr);
     background-color: var(--app-bg-c);
     background-repeat: no-repeat;
-    background-attachment: fixed;
 
     box-sizing: border-box;
 }

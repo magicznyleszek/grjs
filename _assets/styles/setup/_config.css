@@ -8,11 +8,6 @@ basics configuration
 
     --app-txt-c: var(--a-c-white);
     --app-bg-c: var(--a-c-darkOrange);
-    --app-bg-gr: linear-gradient(
-        to bottom,
-        var(--a-c-black) 31%,
-        var(--app-bg-c) 65%
-    );
 
     /* root typography with font sizes for different screens scaling */
 

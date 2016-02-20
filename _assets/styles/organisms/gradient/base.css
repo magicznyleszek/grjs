@@ -1,0 +1,21 @@
+/*------------------------------------------------------------------------------
+gradient organism
+------------------------------------------------------------------------------*/
+
+@import '_config.css';
+
+[gui-o-gradient~='background'] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: var(--a-z-negative);
+
+    width: 100%;
+    height: var(--gradient-background-h);
+
+    pointer-events: none;
+}
+
+[gui-o-gradient~='black-orange'] {
+    background-image: var(--gradient-black-orange);
+}

@@ -2,5 +2,5 @@
 width molecule
 ------------------------------------------------------------------------------*/
 
-[gui-m-width~='ipad-h'] { width: var(--a-s-ipad-h); }
-[gui-m-width~='ipad-v'] { width: var(--a-s-ipad-v); }
+[gui-m-width~='ipad-h'] { max-width: var(--a-s-ipad-h); }
+[gui-m-width~='ipad-v'] { max-width: var(--a-s-ipad-v); }
