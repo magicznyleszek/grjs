@@ -1,4 +1,4 @@
-/* 2016-02-20 */
+/* 2016-02-21 */
 (function (window) {
 
     'use strict';
@@ -14,7 +14,7 @@
         );
         this.form = new app.form.controller(
             new app.form.Input(),
-            new app.form.view(formId),
+            new app.form.view(properties.formId),
             this.broadcaster
         );
     }

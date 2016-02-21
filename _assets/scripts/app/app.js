@@ -13,7 +13,7 @@
         );
         this.form = new app.form.controller(
             new app.form.Input(),
-            new app.form.view(formId),
+            new app.form.view(properties.formId),
             this.broadcaster
         );
     }

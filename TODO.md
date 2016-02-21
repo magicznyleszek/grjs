@@ -70,3 +70,6 @@ Details:
             - on submit button:
                 1. loop through inputs: validate input, (notify error) and go next
                 2. if all valid save data with dataKeeper and notify success
+- styles
+    - notification
+    - textbox white
