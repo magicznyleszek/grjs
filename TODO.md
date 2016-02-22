@@ -53,8 +53,13 @@ Details:
     + get data from localStorage
 - form
     - model for inputs
-        - validation options
+        - validate callback
         - id
+        - is live validated
+        - is submit validated
+        - is empty
+        - is focused
+        - is errored
     - view
         - update attributes by input id (is-empty, is-error)
         - send event on input lost focus
@@ -80,18 +85,23 @@ Form flow:
     - view
     - broadcaster
     - form data
-- controller sends form data inputs to view
+- controller builds fields from models
+- controller sends fields to view for binding
 - view receives list of inputs to watch
 - view binds on input:
     - focus and lost focus = send focus event(id, isFocused)
     - value changes (typing?) = send value event(id, value)
 - view binds on submit = send submit event(inputs array {id, value})
 - controller watches events
-    - focus = view set input status "focused" (data-status)
-    - value = validate
+    - focus
+        - set model flag
+        - view refresh input status
+    - value
+        - set model value
+        - validate value
         - send notification on error for some
-        - view set input status "empty"
-    - submitted = validate all loop
-        - send notification event on any error
-        - send notification event on success
-        - send save storage data event on success
+        - view refresh input status
+    - submitted
+        - validate all loop = send notification event on any error
+        - send notification event on all success
+        - send save storage data event on all success
