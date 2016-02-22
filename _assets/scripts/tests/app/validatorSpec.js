@@ -297,4 +297,53 @@ describe('validator', function () {
 
     });
 
+    describe('testEmail method', function () {
+
+        it('should exist', function () {
+            expect(window.mockValidator.testEmail).toBeDefined();
+        });
+
+        it('should succeed for valid email', function () {
+            var testFunc = window.mockValidator.testEmail;
+            var validEmails = [
+                'foo@bar.fum',
+                'foo.bar@fum.baz',
+                'foo@bar.fum.baz',
+                '123@foo',
+                'foo+bar@fum',
+                'foo-bar@fum.baz',
+                'foo.bar-fum@baz-qux.zot',
+                '#!$%&\'*+-/=?^_`{}|~@foo.bar',
+                'foo@bar1'
+            ];
+            for (var i = 0; i < validEmails.length; i += 1) {
+                expect(testFunc(validEmails[i])).toBeTruthy();
+            }
+        });
+
+        it('should fail for invalid email', function () {
+            var testFunc = window.mockValidator.testEmail;
+            var invalidEmails = [
+                'foo',
+                '@',
+                'foo@',
+                '@foo',
+                '@foo.bar',
+                '.foo@bar.fum',
+                'foo.@bar.fum',
+                'foo..bar.fum',
+                'foo@.bar.fum',
+                'foo_bar-fum.baz',
+                'foo@bar..fum',
+                'foo@bar@fum.baz',
+                'foo@bar.fum ',
+                ' foo@bar.fum'
+            ];
+            for (var i = 0; i < invalidEmails.length; i += 1) {
+                expect(testFunc(invalidEmails[i])).toBeFalsy();
+            }
+        });
+
+    });
+
 });

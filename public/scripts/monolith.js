@@ -205,6 +205,33 @@
         return isOverMin && isUnderMax;
     };
 
+    // Check if email is valid.
+    // @param {string} [email] email to be tested
+    AppValidator.prototype.testEmail = function (email) {
+        var lastIndex = email.length - 1;
+
+        var hasOneAt = email.split('@').length - 1 === 1;
+        var noStartAt = email[0] !== '@';
+        var noEndAt = email[lastIndex] !== '@';
+        var noStartDot = email[0] !== '.';
+        var noStartSpace = email[0] !== ' ';
+        var noEndSpace = email[lastIndex] !== ' ';
+        var noDotBeforeAt = email.indexOf('.@') < 0;
+        var noAtBeforeDot = email.indexOf('@.') < 0;
+        var noDotBeforeDot = email.indexOf('..') < 0;
+
+        if (hasOneAt === false) { return false; }
+        else if (noStartAt === false) { return false; }
+        else if (noEndAt === false) { return false; }
+        else if (noStartDot === false) { return false; }
+        else if (noStartSpace === false) { return false; }
+        else if (noEndSpace === false) { return false; }
+        else if (noDotBeforeAt === false) { return false; }
+        else if (noAtBeforeDot === false) { return false; }
+        else if (noDotBeforeDot === false) { return false; }
+        else { return true; }
+    };
+
     // export to app
 	window.app = window.app || {};
 	window.app.validator = AppValidator;
