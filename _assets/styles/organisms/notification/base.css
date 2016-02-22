@@ -20,12 +20,7 @@ notification organism
     background-color: var(--notification-bg);
 
     animation-duration: var(--a-t-slow);
-    animation-name: fadein;
-}
-
-@keyframes fadein {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    animation-name: notification-fadein;
 }
 
 [gui-o-notification~='info'] {
