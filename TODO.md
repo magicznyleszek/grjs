@@ -72,4 +72,4 @@ Details:
                 2. if all valid save data with dataKeeper and notify success
 - styles
     - notification
-    - textbox white
+    + textbox white

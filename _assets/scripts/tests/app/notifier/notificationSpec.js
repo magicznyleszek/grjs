@@ -2,6 +2,10 @@ describe('notifier: notification', function () {
 
     'use strict';
 
+    beforeEach(function () {
+        window.notificationAm = 'gui-o-notification';
+    });
+
     it('should exist', function () {
         expect(app.notifier.Notification).toBeDefined();
     });
@@ -49,16 +53,22 @@ describe('notifier: notification', function () {
             expect(el.attributes.id).toBeDefined();
         });
 
+        it('should set proper am', function () {
+            var Model = new app.notifier.Notification;
+            var el = Model.create('foo', 'error');
+            expect(el.attributes[window.notificationAm]).toBeDefined();
+        });
+
         it('should set proper attribute for error type', function () {
             var Model = new app.notifier.Notification;
             var el = Model.create('foo', 'error');
-            expect(el.attributes['gui-o-notification'].value).toEqual('error');
+            expect(el.attributes[window.notificationAm].value).toEqual('error');
         });
 
         it('should default to "info" for unknown types', function () {
             var Model = new app.notifier.Notification;
             var el = Model.create('foo', 'bar');
-            expect(el.attributes['gui-o-notification'].value).toEqual('info');
+            expect(el.attributes[window.notificationAm].value).toEqual('info');
         });
 
     });
