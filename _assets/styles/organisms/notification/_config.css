@@ -1,0 +1,17 @@
+/*------------------------------------------------------------------------------
+notification config
+------------------------------------------------------------------------------*/
+
+:root {
+
+    --notification-padding: 0.52rem; /* 10px @ 19px */
+    --notification-leading: 1.42rem; /* 27px @ 19px */
+    --notification-h: calc(1.42rem + (0.52rem * 2));
+    --notification-w: 17.89rem; /* 340px @ 19px */
+
+    --notification-bg: color(var(--a-c-suvaGray) a(var(--a-p-giant)));
+
+    --notification-info-bg: var(--notification-bg);
+    --notification-error-bg: color(var(--notification-bg) red(+50%));
+
+}

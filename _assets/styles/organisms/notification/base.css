@@ -1,0 +1,37 @@
+/*------------------------------------------------------------------------------
+notification organism
+------------------------------------------------------------------------------*/
+
+@import '_config.css';
+
+[gui-o-notification] {
+    display: block;
+    width: var(--notification-w);
+
+    padding: var(--notification-padding);
+    margin: var(--a-s-little);
+
+    min-height: var(--notification-h);
+    line-height: var(--notification-leading);
+
+    border-radius: var(--a-s-tiny);
+    color: var(--a-c-white);
+
+    background-color: var(--notification-bg);
+
+    animation-duration: var(--a-t-slow);
+    animation-name: fadein;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+[gui-o-notification~='info'] {
+    background-color: var(--notification-info-bg);
+}
+
+[gui-o-notification~='error'] {
+    background-color: var(--notification-error-bg);
+}

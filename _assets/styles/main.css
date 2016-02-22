@@ -23,5 +23,6 @@ main styles aggregation
 @import 'organisms/button/base.css';
 @import 'organisms/container/base.css';
 @import 'organisms/gradient/base.css';
+@import 'organisms/notification/base.css';
 @import 'organisms/symbol/base.css';
 @import 'organisms/textbox/base.css';
