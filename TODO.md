@@ -72,3 +72,26 @@ Details:
                 2. if all valid save data with dataKeeper and notify success
 + notification styles
 + textbox white styles
+
+
+Form flow:
+- controller receives:
+    - input model
+    - view
+    - broadcaster
+    - form data
+- controller sends form data inputs to view
+- view receives list of inputs to watch
+- view binds on input:
+    - focus and lost focus = send focus event(id, isFocused)
+    - value changes (typing?) = send value event(id, value)
+- view binds on submit = send submit event(inputs array {id, value})
+- controller watches events
+    - focus = view set input status "focused" (data-status)
+    - value = validate
+        - send notification on error for some
+        - view set input status "empty"
+    - submitted = validate all loop
+        - send notification event on any error
+        - send notification event on success
+        - send save storage data event on success
