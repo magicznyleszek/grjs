@@ -11,7 +11,9 @@ textbox config
     --textbox-input-br: var(--a-s-tiny);
     --textbox-input-txt: var(--a-c-black);
     --textbox-input-fontsize: 1rem; /* 19px */
-    --textbox-input-bg-gr: linear-gradient(
+    --textbox-input-bg: var(--a-c-white);
+
+    --textbox-input-white-orange-bg: linear-gradient(
         to bottom,
         var(--a-c-white),
         color( var(--a-c-darkOrange) tint(60%) )

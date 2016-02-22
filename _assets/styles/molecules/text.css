@@ -20,6 +20,7 @@ text molecule
 [gui-m-text~='untransformed'] { text-transform: none; }
 
 [gui-m-text~='underlined'] { text-decoration: underline; }
+[gui-m-text~='narrow'] { letter-spacing: -0.05rem; }
 
 /* trims text with an ellipsis */
 [gui-m-text~='trimmed'] {

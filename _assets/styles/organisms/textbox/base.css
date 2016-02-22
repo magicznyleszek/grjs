@@ -32,7 +32,8 @@ textbox organism
     color: var(--textbox-input-txt);
     font-size: var(--textbox-input-fontsize);
 
-    background-image: var(--textbox-input-bg-gr);
+    background-color: var(--textbox-input-bg);
+
 }
 
 [gui-o-textbox] label {
@@ -50,4 +51,9 @@ textbox organism
     color: var(--textbox-label-txt);
 
     pointer-events: none;
+}
+
+[gui-o-textbox~='white-orange'] input,
+[gui-o-textbox~='white-orange'] textarea {
+    background-image: var(--textbox-input-white-orange-bg);
 }

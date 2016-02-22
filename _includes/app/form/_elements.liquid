@@ -1,4 +1,4 @@
-<div gui-m-column="1/2" gui-m-pad="little-r big-b">
+<div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h big-b">
     <div gui-m-text="uppercased darkOrange s-33 righted">
         <input
             type="radio"
@@ -12,7 +12,7 @@
             <data value="109.00">€100</data>
         </label>
     </div>
-</div><div gui-m-column="1/2" gui-m-pad="little-l big-b">
+</div><div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h big-b">
     <div gui-m-text="uppercased darkOrange s-33">
         <input
             type="radio"
@@ -28,8 +28,8 @@
     </div>
 </div>
 
-<div gui-m-column="1/2" gui-m-pad="little-r medium-b">
-    <div gui-o-textbox>
+<div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h medium-b">
+    <div gui-o-textbox="white-orange">
         <input
             type="text"
             name="firstName"
@@ -38,8 +38,8 @@
         >
         <label for="promoForm-firstName">First name</label>
     </div>
-</div><div gui-m-column="1/2" gui-m-pad="little-l medium-b">
-    <div gui-o-textbox>
+</div><div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h medium-b">
+    <div gui-o-textbox="white-orange">
         <input
             type="text"
             name="lastName"
@@ -50,8 +50,8 @@
     </div>
 </div>
 
-<div gui-m-column="1/2" gui-m-pad="little-r medium-b">
-    <div gui-o-textbox>
+<div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h medium-b">
+    <div gui-o-textbox="white-orange">
         <textarea
             name="messageOne"
             id="promoForm-messageOne"
@@ -60,8 +60,8 @@
         ></textarea>
         <label for="promoForm-messageOne">Textarea 1</label>
     </div>
-</div><div gui-m-column="1/2" gui-m-pad="little-l medium-b">
-    <div gui-o-textbox>
+</div><div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h medium-b">
+    <div gui-o-textbox="white-orange">
         <textarea
             name="messageTwo"
             id="promoForm-messageTwo"
@@ -72,8 +72,8 @@
     </div>
 </div>
 
-<div gui-m-column="1/2" gui-m-pad="little-r huge-b">
-    <div gui-o-textbox>
+<div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h huge-b">
+    <div gui-o-textbox="white-orange">
         <input
             type="text"
             name="email"
@@ -82,8 +82,8 @@
         >
         <label for="promoForm-email">Email</label>
     </div>
-</div><div gui-m-column="1/2" gui-m-pad="little-l huge-b">
-    <div gui-o-textbox>
+</div><div gui-m-column="m-1/2 b-1/2" gui-m-pad="little-h huge-b">
+    <div gui-o-textbox="white-orange">
         <input
             type="password"
             name="pass"
@@ -94,25 +94,35 @@
     </div>
 </div>
 
-<div gui-m-column="1/2" gui-m-columnbefore="1/4" gui-m-columnafter="1/4">
-    <div gui-o-textbox>
-        <input
-            type="text"
-            name="vid"
-            id="promoForm-vid"
-            data-validatorType="vid"
-        >
-        <label for="promoForm-vid">VID Number</label>
-    </div>
-    <div>
-        <input
-            type="text"
-            name="counter"
-            id="promoForm-counter"
-            data-validatorType="counter20"
-        >
-        <label for="promoForm-counter">
+<div
+    gui-m-column="m-1/2 b-1/2"
+    gui-m-columnbefore="m-1/4 b-1/4"
+    gui-m-columnafter="m-1/4 b-1/4"
+>
+
+    <div gui-m-column="m-2/5 b-2/5 middle" gui-m-pad="little-h medium-b">
+        <div gui-o-textbox>
+            <input
+                type="text"
+                name="vid"
+                id="promoForm-vid"
+                data-validatorType="vid"
+            >
+            <label for="promoForm-vid">VID Number</label>
+        </div>
+    </div><div gui-m-column="m-1/5 b-1/5 middle" gui-m-pad="little-h medium-b">
+        <div gui-o-textbox>
+            <input
+                type="text"
+                name="counter"
+                id="promoForm-counter"
+                data-validatorType="counter20"
+            >
+        </div>
+    </div><div gui-m-column="m-2/5 b-2/5 middle" gui-m-pad="little-h medium-b">
+        <label for="promoForm-counter" gui-m-text="narrow trimmed">
             &times; Number of tickets
         </label>
     </div>
+
 </div>
