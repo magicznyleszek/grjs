@@ -18,9 +18,9 @@
             throw new Error('Tried to create formless controller.');
         }
 
-        this.model = model;
-        this.view = view;
-        this.broadcaster = broadcaster;
+        this._model = model;
+        this._view = view;
+        this._broadcaster = broadcaster;
         this._formData = form;
     };
 

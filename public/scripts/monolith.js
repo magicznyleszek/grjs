@@ -10,6 +10,7 @@
     // - @property {string} [storageId] a prefix for storage cache
     // - @property {object} [form] a form object with properties
     // - - @property {string} [id] html id of form container
+    // - - @property {string} [submitId] html id of form submit button
     // - - @property {array} [fields] a list of form fields
     // - - - @element {object} a form element object with properties
     // - - - - @property {string} [name] form field input name
@@ -17,7 +18,6 @@
     // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
         this.broadcaster = new app.broadcaster(new app.actions);
-        this.validator = new app.validator();
         this.storage = new app.storage(properties.storageId);
         this.notifier = new app.notifier.controller(
             new app.notifier.Notification(),
@@ -25,8 +25,8 @@
             this.broadcaster
         );
         this.form = new app.form.controller(
-            new app.form.Input(),
-            new app.form.view(),
+            new app.form.Input(new app.validator()),
+            new app.form.view(properties.form.id),
             this.broadcaster,
             properties.form
         );
@@ -38,6 +38,7 @@
             storageId: 'grjs',
             form: {
                 id: 'promoForm',
+                submitId: 'promoForm-registerButton',
                 fields: [
                     {
                         name: 'amount-1',
@@ -320,6 +321,8 @@
     // @param {string} [message] to be shown in notification
     // @param {string} [type] for distinguishin between errors and infos
     AppNotification.prototype.create = function (message, type) {
+        var element = document.createElement('div');
+
         // safety checks
         if (message === undefined) {
             throw new Error('Tried to create messageless notification.');
@@ -330,7 +333,6 @@
             default: type = this._defaultType;
         }
 
-        var element = document.createElement('div');
         element.setAttribute(this._amAttr, type);
         element.setAttribute('id', this._generateId());
         element.innerText = message;
@@ -470,19 +472,87 @@
     'use strict';
 
     // constructor
-    var AppInput = function () {
+    var AppInput = function (validator) {
+        // safety checks
+        if (validator === undefined) {
+            throw new Error('Tried to create validatorless model.');
+        }
+
+        this._validator = validator;
+
         // a list of validator types (functions)
-        this._validatorTypes = {
-            person: function () {},
-            text10: function () {},
-            text20: function () {},
-            email: function () {},
-            password: function () {},
-            vid: function () {},
-            counter20: function () {}
+        this._validateTypes = {
+            person: function () {
+                var string = this.value;
+                var isNonEmpty = this._validator.testLengthOver(string, 0);
+                var hasNoDigits = this._validator.testHasNoDigits(string);
+                return isNonEmpty && hasNoDigits;
+            },
+            text10: function () {
+                var string = this.value;
+                var isNonEmpty = this._validator.testLengthOver(string, 0);
+                var isUnder11 = this._validator.testLengthUnder(string, 11);
+                return isNonEmpty && isUnder11;
+            },
+            text20: function () {
+                var string = this.value;
+                var isNonEmpty = this._validator.testLengthOver(string, 0);
+                var isUnder21 = this._validator.testLengthUnder(string, 21);
+                return isNonEmpty && isUnder21;
+            },
+            email: function () {
+                var string = this.value;
+                return this._validator.testEmail(string);
+            },
+            password: function () {
+                var string = this.value;
+                var isOver7 = this._validator.testLengthUnder(string, 7);
+                var hasDigits = this._validator.testHasDigits(string);
+                var hasLetters = this._validator.testHasLetters(string);
+                var hasSpecials = this._validator.testHasSpecials(string);
+                return isOver7 && hasDigits && hasLetters && hasSpecials;
+            },
+            vid: function () {
+                var string = this.value;
+                var isNonEmpty = this._validator.testLengthOver(string, 0);
+                var isUnder6 = this._validator.testLengthUnder(string, 6);
+                var hasOnlyDigits = this._validator.testHasOnlyDigits(string);
+                return isNonEmpty && isUnder6 && hasOnlyDigits;
+            },
+            counter20: function () {
+                var number = parseInt(this.value);
+                var isNonEmpty = this._validator.testLengthOver(number, 0);
+                var isInRange = this._validator.testNumberRange(number, 1, 20);
+                return isNonEmpty && isInRange;
+            }
         };
     };
 
+    // Creates an input instance.
+    // @param {string} [name] name of the input
+    // @param {string} [type] validate type to match function with
+    // @param {bool} [liveValidated] for marking input as live validating
+    AppInput.prototype.create = function (name, type, liveValidated) {
+        var validateFunc = this._validateTypes[type];
+
+        // safety checks
+        if (name === undefined) {
+            throw new Error('Tried to create nameless input.');
+        }
+        if (validateFunc === undefined) {
+            validateFunc = function () { return true; }
+        }
+
+        return {
+            name: name,
+            value: null,
+            validate: validateFunc,
+            isLiveValidated: false,
+            isEmpty: false,
+            isFocused: false,
+            isValid: false
+        };
+    };
 
     // export to app
     window.app = window.app || {};
@@ -497,7 +567,28 @@
     'use strict';
 
     // constructor
-    var AppFormView = function () {};
+    // @param {string} [formId] html id of form element
+    var AppFormView = function (formId) {
+        this._containerEl = document.getElementById(formId);
+    };
+
+    // Binds  form submitting.
+    // @param {string} [submitButtonId] id of submit button
+    AppFormView.prototype.bindSubmit = function (submitButtonId) {
+
+    };
+
+    // Binds to events on input.
+    // @param {object} [input] input properties data
+    AppFormView.prototype.bindInput = function (input) {
+
+    };
+
+    // Refreshes input view state.
+    // @param {object} [input] input properties data
+    AppFormView.prototype.refreshInputState = function (input) {
+
+    };
 
     // export to app
     window.app = window.app || {};
@@ -527,9 +618,9 @@
             throw new Error('Tried to create formless controller.');
         }
 
-        this.model = model;
-        this.view = view;
-        this.broadcaster = broadcaster;
+        this._model = model;
+        this._view = view;
+        this._broadcaster = broadcaster;
         this._formData = form;
     };
 

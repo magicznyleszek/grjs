@@ -84,7 +84,9 @@ module.exports = function(grunt) {
             options: {
                 vendor: '_assets/scripts/thirdparty/**/*.js',
                 specs: '_assets/scripts/tests/**/*Spec.js',
-                helpers: '_assets/scripts/tests/**/*Helper.js'
+                helpers: '_assets/scripts/tests/**/*Helper.js',
+                dispaly: 'short',
+                summary: true
             }
         },
         'jasmine-server': {

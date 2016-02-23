@@ -9,6 +9,7 @@
     // - @property {string} [storageId] a prefix for storage cache
     // - @property {object} [form] a form object with properties
     // - - @property {string} [id] html id of form container
+    // - - @property {string} [submitId] html id of form submit button
     // - - @property {array} [fields] a list of form fields
     // - - - @element {object} a form element object with properties
     // - - - - @property {string} [name] form field input name
@@ -24,7 +25,7 @@
         );
         this.form = new app.form.controller(
             new app.form.Input(new app.validator()),
-            new app.form.view(),
+            new app.form.view(properties.form.id),
             this.broadcaster,
             properties.form
         );
@@ -36,6 +37,7 @@
             storageId: 'grjs',
             form: {
                 id: 'promoForm',
+                submitId: 'promoForm-registerButton',
                 fields: [
                     {
                         name: 'amount-1',

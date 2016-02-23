@@ -12,6 +12,8 @@
     // @param {string} [message] to be shown in notification
     // @param {string} [type] for distinguishin between errors and infos
     AppNotification.prototype.create = function (message, type) {
+        var element = document.createElement('div');
+
         // safety checks
         if (message === undefined) {
             throw new Error('Tried to create messageless notification.');
@@ -22,7 +24,6 @@
             default: type = this._defaultType;
         }
 
-        var element = document.createElement('div');
         element.setAttribute(this._amAttr, type);
         element.setAttribute('id', this._generateId());
         element.innerText = message;

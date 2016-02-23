@@ -4,55 +4,88 @@
 
     // constructor
     var AppInput = function (validator) {
+        var selfValidator = null;
+
         // safety checks
         if (validator === undefined) {
             throw new Error('Tried to create validatorless model.');
         }
 
-        this.validator = validator;
+        var selfValidator = validator;
 
         // a list of validator types (functions)
         this._validateTypes = {
-            person: function (string) {
-                var isNonEmpty = this.validator.testLengthOver(string, 0);
-                var hasNoDigits = this.validator.testHasNoDigits(string);
+            person: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var hasNoDigits = selfValidator.testHasNoDigits(string);
                 return isNonEmpty && hasNoDigits;
             },
-            text10: function (string) {
-                var isNonEmpty = this.validator.testLengthOver(string, 0);
-                var isUnder11 = this.validator.testLengthUnder(string, 11);
+            text10: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder11 = selfValidator.testLengthUnder(string, 11);
                 return isNonEmpty && isUnder11;
             },
-            text20: function (string) {
-                var isNonEmpty = this.validator.testLengthOver(string, 0);
-                var isUnder21 = this.validator.testLengthUnder(string, 21);
+            text20: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder21 = selfValidator.testLengthUnder(string, 21);
                 return isNonEmpty && isUnder21;
             },
-            email: function (string) {
-                return this.validator.testEmail(string);
+            email: function () {
+                var string = this.value;
+                return selfValidator.testEmail(string);
             },
-            password: function (string) {
-                var isOver7 = this.validator.testLengthUnder(string, 7);
-                var hasDigits = this.validator.testHasDigits(string);
-                var hasLetters = this.validator.testHasLetters(string);
-                var hasSpecials = this.validator.testHasSpecials(string);
+            password: function () {
+                var string = this.value;
+                var isOver7 = selfValidator.testLengthUnder(string, 7);
+                var hasDigits = selfValidator.testHasDigits(string);
+                var hasLetters = selfValidator.testHasLetters(string);
+                var hasSpecials = selfValidator.testHasSpecials(string);
                 return isOver7 && hasDigits && hasLetters && hasSpecials;
             },
-            vid: function (string) {
-                var isNonEmpty = this.validator.testLengthOver(string, 0);
-                var isUnder6 = this.validator.testLengthUnder(string, 6);
-                var hasOnlyDigits = this.validator.testHasOnlyDigits(string);
+            vid: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder6 = selfValidator.testLengthUnder(string, 6);
+                var hasOnlyDigits = selfValidator.testHasOnlyDigits(string);
                 return isNonEmpty && isUnder6 && hasOnlyDigits;
             },
-            counter20: function (number) {
-                number = parseInt(number);
-                var isNonEmpty = this.validator.testLengthOver(number, 0);
-                var isInRange = this.validator.testNumberRange(number, 1, 20);
+            counter20: function () {
+                var number = parseInt(this.value);
+                var isNonEmpty = selfValidator.testLengthOver(number, 0);
+                var isInRange = selfValidator.testNumberRange(number, 1, 20);
                 return isNonEmpty && isInRange;
             }
         };
     };
 
+    // Creates an input instance.
+    // @param {string} [name] name of the input
+    // @param {string} [type] validate type to match function with
+    // @param {bool} [liveValidated] for marking input as live validating
+    AppInput.prototype.create = function (name, type, liveValidated) {
+        var validateFunc = this._validateTypes[type];
+
+        // safety checks
+        if (name === undefined) {
+            throw new Error('Tried to create nameless input.');
+        }
+        if (validateFunc === undefined) {
+            validateFunc = function () { return true; }
+        }
+
+        return {
+            name: name,
+            value: null,
+            validate: validateFunc,
+            isLiveValidated: false,
+            isEmpty: false,
+            isFocused: false,
+            isValid: false
+        };
+    };
 
     // export to app
     window.app = window.app || {};

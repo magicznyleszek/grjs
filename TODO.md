@@ -52,14 +52,13 @@ Details:
     + save data to localStorage
     + get data from localStorage
 - form
-    - model for inputs
-        - validate callback
-        - id
-        - is live validated
-        - is submit validated
-        - is empty
-        - is focused
-        - is errored
+    + model for inputs
+        + validate callback
+        + name
+        + is live validated
+        + is empty
+        + is focused
+        + is errored
     - view
         - update attributes by input id (is-empty, is-error)
         - send event on input lost focus
