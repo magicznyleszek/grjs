@@ -79,8 +79,10 @@ Details:
 
 Refactoring:
 
-- notifier: move html creation from model to view
-- storage: handle save data event
+- notifier should move html creation from model to view
+- notifier view should set container with methods by controller
+- storage should handle save data on broadcaster event
+- form view should only need broadcaster, rest should be set with methods by controller
 
 Form flow:
 

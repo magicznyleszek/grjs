@@ -26,7 +26,7 @@
         );
         this.form = new app.form.controller(
             new app.form.Input(new app.validator()),
-            new app.form.view(properties.form.id),
+            new app.form.view(this.broadcaster, properties.form),
             this.broadcaster,
             properties.form
         );
@@ -106,7 +106,9 @@
     var AppActions = function () {
         return {
             testAction: 'GRJS_TEST_ACTION',
-            addNotification: 'GRJS_ADD_NOTIFICATION'
+            addNotification: 'GRJS_ADD_NOTIFICATION',
+            formInputValueChanged: 'GRJS_FORM_INPUT_VALUE_CHANGED',
+            formInputFocusChanged: 'GRJS_FORM_INPUT_FOCUS_CHANGED',
         };
     };
 
@@ -399,6 +401,9 @@
     'use strict';
 
     // constructor
+    // @param {object} [model] controller model
+    // @param {object} [view] controller view
+    // @param {object} [broadcaster] global event handler
     var AppNotifierController = function (model, view, broadcaster) {
         // safety checks
         if (model === undefined) {
@@ -473,56 +478,58 @@
 
     // constructor
     var AppInput = function (validator) {
+        var selfValidator = null;
+
         // safety checks
         if (validator === undefined) {
             throw new Error('Tried to create validatorless model.');
         }
 
-        this._validator = validator;
+        var selfValidator = validator;
 
         // a list of validator types (functions)
         this._validateTypes = {
             person: function () {
                 var string = this.value;
-                var isNonEmpty = this._validator.testLengthOver(string, 0);
-                var hasNoDigits = this._validator.testHasNoDigits(string);
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var hasNoDigits = selfValidator.testHasNoDigits(string);
                 return isNonEmpty && hasNoDigits;
             },
             text10: function () {
                 var string = this.value;
-                var isNonEmpty = this._validator.testLengthOver(string, 0);
-                var isUnder11 = this._validator.testLengthUnder(string, 11);
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder11 = selfValidator.testLengthUnder(string, 11);
                 return isNonEmpty && isUnder11;
             },
             text20: function () {
                 var string = this.value;
-                var isNonEmpty = this._validator.testLengthOver(string, 0);
-                var isUnder21 = this._validator.testLengthUnder(string, 21);
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder21 = selfValidator.testLengthUnder(string, 21);
                 return isNonEmpty && isUnder21;
             },
             email: function () {
                 var string = this.value;
-                return this._validator.testEmail(string);
+                return selfValidator.testEmail(string);
             },
             password: function () {
                 var string = this.value;
-                var isOver7 = this._validator.testLengthUnder(string, 7);
-                var hasDigits = this._validator.testHasDigits(string);
-                var hasLetters = this._validator.testHasLetters(string);
-                var hasSpecials = this._validator.testHasSpecials(string);
+                var isOver7 = selfValidator.testLengthUnder(string, 7);
+                var hasDigits = selfValidator.testHasDigits(string);
+                var hasLetters = selfValidator.testHasLetters(string);
+                var hasSpecials = selfValidator.testHasSpecials(string);
                 return isOver7 && hasDigits && hasLetters && hasSpecials;
             },
             vid: function () {
                 var string = this.value;
-                var isNonEmpty = this._validator.testLengthOver(string, 0);
-                var isUnder6 = this._validator.testLengthUnder(string, 6);
-                var hasOnlyDigits = this._validator.testHasOnlyDigits(string);
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder6 = selfValidator.testLengthUnder(string, 6);
+                var hasOnlyDigits = selfValidator.testHasOnlyDigits(string);
                 return isNonEmpty && isUnder6 && hasOnlyDigits;
             },
             counter20: function () {
                 var number = parseInt(this.value);
-                var isNonEmpty = this._validator.testLengthOver(number, 0);
-                var isInRange = this._validator.testNumberRange(number, 1, 20);
+                var isNonEmpty = selfValidator.testLengthOver(number, 0);
+                var isInRange = selfValidator.testNumberRange(number, 1, 20);
                 return isNonEmpty && isInRange;
             }
         };
@@ -567,9 +574,19 @@
     'use strict';
 
     // constructor
-    // @param {string} [formId] html id of form element
-    var AppFormView = function (formId) {
-        this._containerEl = document.getElementById(formId);
+    // @param {object} [broadcaster] global event handler
+    // @param {object} [form] form settings
+    var AppFormView = function (broadcaster, form) {
+        // safety checks
+        if (form === undefined) {
+            throw new Error('Tried to create formless controller.');
+        }
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless controller.');
+        }
+
+        this._containerEl = document.getElementById(form.id);
+        this._broadcaster = broadcaster;
     };
 
     // Binds  form submitting.
@@ -603,6 +620,10 @@
     'use strict';
 
     // constructor
+    // @param {object} [model] controller model
+    // @param {object} [view] controller view
+    // @param {object} [broadcaster] global event handler
+    // @param {object} [form] form settings
     var AppFormController = function (model, view, broadcaster, form) {
         // safety checks
         if (model === undefined) {

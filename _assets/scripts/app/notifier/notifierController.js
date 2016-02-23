@@ -3,6 +3,9 @@
     'use strict';
 
     // constructor
+    // @param {object} [model] controller model
+    // @param {object} [view] controller view
+    // @param {object} [broadcaster] global event handler
     var AppNotifierController = function (model, view, broadcaster) {
         // safety checks
         if (model === undefined) {

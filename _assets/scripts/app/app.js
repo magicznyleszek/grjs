@@ -16,7 +16,7 @@
     // - - - - @property {string} [type] validation type
     // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
-        this.broadcaster = new app.broadcaster(new app.actions);
+        this.broadcaster = new app.broadcaster(new app.actions());
         this.storage = new app.storage(properties.storageId);
         this.notifier = new app.notifier.controller(
             new app.notifier.Notification(),
@@ -25,7 +25,7 @@
         );
         this.form = new app.form.controller(
             new app.form.Input(new app.validator()),
-            new app.form.view(properties.form.id),
+            new app.form.view(this.broadcaster, properties.form),
             this.broadcaster,
             properties.form
         );

@@ -18,4 +18,12 @@ describe('pubsub: actions', function () {
         expect(window.mockActions.addNotification).toBeDefined();
     });
 
+    it('should have an formInputValueChanged action', function () {
+        expect(window.mockActions.formInputValueChanged).toBeDefined();
+    });
+
+    it('should have an formInputFocusChanged action', function () {
+        expect(window.mockActions.formInputFocusChanged).toBeDefined();
+    });
+
 });

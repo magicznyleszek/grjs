@@ -4,6 +4,23 @@ describe('form: view', function () {
 
     beforeEach(function () {
         // mock form elements
+        var broadcaster = new app.broadcaster(new app.actions());
+        var formSettings = {
+            id: 'fooForm',
+            submitButtonId: 'fooForm-submit',
+            fields: [
+                {
+                    name: 'one',
+                    type: 'email',
+                    liveValidate: false
+                },
+                {
+                    name: 'two',
+                    type: 'person',
+                    liveValidate: true
+                }
+            ]
+        }
         var mockForm = document.createElement('form');
         var mockInput1 = document.createElement('input');
         var mockInput2 = document.createElement('input');
@@ -24,7 +41,7 @@ describe('form: view', function () {
         mockForm.appendChild(mockInput2);
         mockForm.appendChild(mockButton);
 
-        window.mockView = new app.form.view('fooForm', 'fooForm-submit');
+        window.mockView = new app.form.view(broadcaster, formSettings);
     });
 
     it('should exist', function () {
@@ -37,10 +54,29 @@ describe('form: view', function () {
             expect(window.mockView.bindInput).toBeDefined();
         });
 
-        it('should publish event on value changes', function () {
+        it('should publish formInputValueChanged on value changes', function () {
+            var inputElem = document.getElementById('fooForm-one');
+            var tester = {
+                eventFunc: function () {}
+            };
+
+            spyOn(tester, 'eventFunc');
+
+            console.log(window.mockView._broadcaster.subscribe);
+
+            window.mockView._broadcaster.subscribe(
+                'formInputValueChanged',
+                tester.eventFunc
+            );
+
+            // dispatch input event
+            inputElem.dispatchEvent(new Event('input'));
+
+            expect(tester.eventFunc).toHaveBeenCalled();
         });
 
-        it('should publish event on focus changes', function () {
+        it('should publish formInputFocusChanged on focus changes', function () {
+
         });
 
     });
