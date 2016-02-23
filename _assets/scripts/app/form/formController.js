@@ -22,16 +22,6 @@
         this.view = view;
         this.broadcaster = broadcaster;
         this._formData = form;
-
-        this._validatorTypes = {
-            person: function () {},
-            text10: function () {},
-            text20: function () {},
-            email: function () {},
-            password: function () {},
-            vid: function () {},
-            counter20: function () {}
-        };
     };
 
     // export to app

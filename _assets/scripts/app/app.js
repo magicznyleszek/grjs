@@ -13,9 +13,9 @@
     // - - - @element {object} a form element object with properties
     // - - - - @property {string} [name] form field input name
     // - - - - @property {string} [type] validation type
+    // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
         this.broadcaster = new app.broadcaster(new app.actions);
-        this.validator = new app.validator();
         this.storage = new app.storage(properties.storageId);
         this.notifier = new app.notifier.controller(
             new app.notifier.Notification(),
@@ -23,7 +23,7 @@
             this.broadcaster
         );
         this.form = new app.form.controller(
-            new app.form.Input(),
+            new app.form.Input(new app.validator()),
             new app.form.view(),
             this.broadcaster,
             properties.form
@@ -39,43 +39,53 @@
                 fields: [
                     {
                         name: 'amount-1',
-                        type: null
+                        type: null,
+                        liveValidate: false
                     },
                     {
                         name: 'amount-5',
-                        type: null
+                        type: null,
+                        liveValidate: false
                     },
                     {
                         name: 'firstName',
-                        type: 'person'
+                        type: 'person',
+                        liveValidate: false
                     },
                     {
                         name: 'lastName',
-                        type: 'person'
+                        type: 'person',
+                        liveValidate: false
                     },
                     {
                         name: 'messageOne',
-                        type: 'text10'
+                        type: 'text10',
+                        liveValidate: true
                     },
                     {
                         name: 'messageTwo',
-                        type: 'text20'
+                        type: 'text20',
+                        liveValidate: true
                     },
                     {
                         name: 'email',
-                        type: 'email'
+                        type: 'email',
+                        liveValidate: false
                     },
                     {
                         name: 'pass',
-                        type: 'password'
+                        type: 'password',
+                        liveValidate: false
                     },
                     {
                         name: 'vid',
-                        type: 'vid'
+                        type: 'vid',
+                        liveValidate: true
                     },
                     {
                         name: 'counter',
-                        type: 'counter20'
+                        type: 'counter20',
+                        liveValidate: false
                     }
                 ]
             }

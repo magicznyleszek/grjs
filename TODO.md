@@ -46,7 +46,7 @@ Details:
     + has only digits
     + has letters
     + has special characters
-    - email
+    + email
 + storage
     + create localStorage data object if none there
     + save data to localStorage
@@ -78,8 +78,13 @@ Details:
 + notification styles
 + textbox white styles
 
+Refactoring:
+
+- notifier: move html creation from model to view
+- storage: handle save data event
 
 Form flow:
+
 - controller receives:
     - input model
     - view

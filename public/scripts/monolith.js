@@ -1,4 +1,4 @@
-/* 2016-02-22 */
+/* 2016-02-23 */
 (function (window) {
 
     'use strict';
@@ -14,6 +14,7 @@
     // - - - @element {object} a form element object with properties
     // - - - - @property {string} [name] form field input name
     // - - - - @property {string} [type] validation type
+    // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
         this.broadcaster = new app.broadcaster(new app.actions);
         this.validator = new app.validator();
@@ -40,43 +41,53 @@
                 fields: [
                     {
                         name: 'amount-1',
-                        type: null
+                        type: null,
+                        liveValidate: false
                     },
                     {
                         name: 'amount-5',
-                        type: null
+                        type: null,
+                        liveValidate: false
                     },
                     {
                         name: 'firstName',
-                        type: 'person'
+                        type: 'person',
+                        liveValidate: false
                     },
                     {
                         name: 'lastName',
-                        type: 'person'
+                        type: 'person',
+                        liveValidate: false
                     },
                     {
                         name: 'messageOne',
-                        type: 'text10'
+                        type: 'text10',
+                        liveValidate: true
                     },
                     {
                         name: 'messageTwo',
-                        type: 'text20'
+                        type: 'text20',
+                        liveValidate: true
                     },
                     {
                         name: 'email',
-                        type: 'email'
+                        type: 'email',
+                        liveValidate: false
                     },
                     {
                         name: 'pass',
-                        type: 'password'
+                        type: 'password',
+                        liveValidate: false
                     },
                     {
                         name: 'vid',
-                        type: 'vid'
+                        type: 'vid',
+                        liveValidate: true
                     },
                     {
                         name: 'counter',
-                        type: 'counter20'
+                        type: 'counter20',
+                        liveValidate: false
                     }
                 ]
             }
@@ -459,7 +470,19 @@
     'use strict';
 
     // constructor
-    var AppInput = function () {};
+    var AppInput = function () {
+        // a list of validator types (functions)
+        this._validatorTypes = {
+            person: function () {},
+            text10: function () {},
+            text20: function () {},
+            email: function () {},
+            password: function () {},
+            vid: function () {},
+            counter20: function () {}
+        };
+    };
+
 
     // export to app
     window.app = window.app || {};
@@ -508,16 +531,6 @@
         this.view = view;
         this.broadcaster = broadcaster;
         this._formData = form;
-
-        this._validatorTypes = {
-            person: function () {},
-            text10: function () {},
-            text20: function () {},
-            email: function () {},
-            password: function () {},
-            vid: function () {},
-            counter20: function () {}
-        };
     };
 
     // export to app
