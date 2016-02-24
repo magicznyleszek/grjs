@@ -1,4 +1,4 @@
-/* 2016-02-23 */
+/* 2016-02-24 */
 (function (window) {
 
     'use strict';
@@ -17,7 +17,7 @@
     // - - - - @property {string} [type] validation type
     // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
-        this.broadcaster = new app.broadcaster(new app.actions);
+        this.broadcaster = new app.broadcaster(new app.actions());
         this.storage = new app.storage(properties.storageId);
         this.notifier = new app.notifier.controller(
             new app.notifier.Notification(),
@@ -105,10 +105,11 @@
     // constructor
     var AppActions = function () {
         return {
-            testAction: 'GRJS_TEST_ACTION',
-            addNotification: 'GRJS_ADD_NOTIFICATION',
-            formInputValueChanged: 'GRJS_FORM_INPUT_VALUE_CHANGED',
-            formInputFocusChanged: 'GRJS_FORM_INPUT_FOCUS_CHANGED',
+            testAction: 'TEST_ACTION',
+            addNotification: 'ADD_NOTIFICATION',
+            formInputValueChanged: 'FORM_INPUT_VALUE_CHANGED',
+            formInputFocusChanged: 'FORM_INPUT_FOCUS_CHANGED',
+            formSubmitted: 'FORM_SUBMITTED'
         };
     };
 
@@ -415,14 +416,14 @@
         if (broadcaster === undefined) {
             throw new Error('Tried to create broadcasterless controller.');
         }
-        this.model = model;
-        this.view = view;
-        this.broadcaster = broadcaster;
+        this._model = model;
+        this._view = view;
+        this._broadcaster = broadcaster;
 
         this._notificationLifespan = 2 * 1000; // 2s
 
-        this.broadcaster.subscribe(
-            this.broadcaster.actions.addNotification,
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.addNotification,
             this._onAddNotification.bind(this)
         );
     };
@@ -446,10 +447,10 @@
     // @param {string} [message] to be displayed
     // @param {string} [type] of the notification
     AppNotifierController.prototype._createNotification = function (message, type) {
-        var notification = this.model.create(message, type);
+        var notification = this._model.create(message, type);
         var id = notification.attributes.id.value;
 
-        this.view.add(notification);
+        this._view.add(notification);
 
         setTimeout(
             this._destroyNotification.bind(this),
@@ -461,7 +462,7 @@
     // Destroys a notification by id.
     // @param {string} [id] of notification to be destroyed
     AppNotifierController.prototype._destroyNotification = function (id) {
-        this.view.remove(id);
+        this._view.remove(id);
     };
 
     // export to app
@@ -585,26 +586,91 @@
             throw new Error('Tried to create broadcasterless controller.');
         }
 
-        this._containerEl = document.getElementById(form.id);
+        this._formId = form.id;
+        this._containerEl = document.getElementById(this._formId);
         this._broadcaster = broadcaster;
+        this._stateAttrs = {
+            empty: 'data-state-empty',
+            focused: 'data-state-focused',
+            valid: 'data-state-valid'
+        };
+    };
+
+    // Returns dom input element.
+    // @param {string} [name] name attribute of input element
+    AppFormView.prototype._findInputEl = function (name) {
+        return this._containerEl.querySelector('*[name="' + name + '"]');
     };
 
     // Binds  form submitting.
     // @param {string} [submitButtonId] id of submit button
     AppFormView.prototype.bindSubmit = function (submitButtonId) {
+        var self = this;
+        var buttonEl = this._containerEl.querySelector('*[id="' + submitButtonId + '"]');
 
+        buttonEl.addEventListener('click', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formSubmitted,
+                { id: self._formId }
+            );
+        });
     };
 
     // Binds to events on input.
     // @param {object} [input] input properties data
     AppFormView.prototype.bindInput = function (input) {
+        var self = this;
+        var inputName = input.name;
+        var inputEl = this._findInputEl(inputName);
 
+        inputEl.addEventListener('input', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formInputValueChanged,
+                { name: inputName, value: inputEl.value }
+            );
+        });
+        inputEl.addEventListener('focus', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formInputFocusChanged,
+                { name: inputName, isFocused: true }
+            );
+        });
+        inputEl.addEventListener('blur', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formInputFocusChanged,
+                { name: inputName, isFocused: false }
+            );
+        });
     };
 
     // Refreshes input view state.
     // @param {object} [input] input properties data
     AppFormView.prototype.refreshInputState = function (input) {
+        var inputEl = this._findInputEl(input.name);
 
+        if (input.isEmpty) {
+            inputEl.setAttribute(this._stateAttrs.empty, '');
+        } else {
+            if (inputEl.hasAttribute(this._stateAttrs.empty)) {
+                inputEl.removeAttribute(this._stateAttrs.empty);
+            }
+        }
+
+        if (input.isFocused) {
+            inputEl.setAttribute(this._stateAttrs.focused, '');
+        } else {
+            if (inputEl.hasAttribute(this._stateAttrs.focused)) {
+                inputEl.removeAttribute(this._stateAttrs.focused);
+            }
+        }
+
+        if (input.isValid) {
+            inputEl.setAttribute(this._stateAttrs.valid, '');
+        } else {
+            if (inputEl.hasAttribute(this._stateAttrs.valid)) {
+                inputEl.removeAttribute(this._stateAttrs.valid);
+            }
+        }
     };
 
     // export to app

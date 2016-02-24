@@ -10,20 +10,24 @@ describe('pubsub: actions', function () {
         expect(window.mockActions).toBeDefined();
     });
 
-    it('should have a test action', function () {
+    it('should have test action', function () {
         expect(window.mockActions.testAction).toBeDefined();
     });
 
-    it('should have an addNotification action', function () {
+    it('should have addNotification action', function () {
         expect(window.mockActions.addNotification).toBeDefined();
     });
 
-    it('should have an formInputValueChanged action', function () {
+    it('should have formInputValueChanged action', function () {
         expect(window.mockActions.formInputValueChanged).toBeDefined();
     });
 
-    it('should have an formInputFocusChanged action', function () {
+    it('should have formInputFocusChanged action', function () {
         expect(window.mockActions.formInputFocusChanged).toBeDefined();
+    });
+
+    it('should have formSubmitted action', function () {
+        expect(window.mockActions.formSubmitted).toBeDefined();
     });
 
 });

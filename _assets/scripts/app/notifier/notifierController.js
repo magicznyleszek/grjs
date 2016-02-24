@@ -17,14 +17,14 @@
         if (broadcaster === undefined) {
             throw new Error('Tried to create broadcasterless controller.');
         }
-        this.model = model;
-        this.view = view;
-        this.broadcaster = broadcaster;
+        this._model = model;
+        this._view = view;
+        this._broadcaster = broadcaster;
 
         this._notificationLifespan = 2 * 1000; // 2s
 
-        this.broadcaster.subscribe(
-            this.broadcaster.actions.addNotification,
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.addNotification,
             this._onAddNotification.bind(this)
         );
     };
@@ -48,10 +48,10 @@
     // @param {string} [message] to be displayed
     // @param {string} [type] of the notification
     AppNotifierController.prototype._createNotification = function (message, type) {
-        var notification = this.model.create(message, type);
+        var notification = this._model.create(message, type);
         var id = notification.attributes.id.value;
 
-        this.view.add(notification);
+        this._view.add(notification);
 
         setTimeout(
             this._destroyNotification.bind(this),
@@ -63,7 +63,7 @@
     // Destroys a notification by id.
     // @param {string} [id] of notification to be destroyed
     AppNotifierController.prototype._destroyNotification = function (id) {
-        this.view.remove(id);
+        this._view.remove(id);
     };
 
     // export to app

@@ -80,17 +80,15 @@ module.exports = function(grunt) {
             }
         },
         jasmine: {
-            src: '_assets/scripts/app/**/*.js',
-            options: {
-                vendor: '_assets/scripts/thirdparty/**/*.js',
-                specs: '_assets/scripts/tests/**/*Spec.js',
-                helpers: '_assets/scripts/tests/**/*Helper.js',
-                dispaly: 'short',
-                summary: true
+            default: {
+                src: '_assets/scripts/app/**/*.js',
+                options: {
+                    specs: '_assets/scripts/tests/**/*Spec.js',
+                    display: 'full',
+                    summary: true,
+                    browser: true
+                }
             }
-        },
-        'jasmine-server': {
-            browser: false
         }
     });
 
