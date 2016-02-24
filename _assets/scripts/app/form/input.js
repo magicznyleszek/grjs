@@ -76,6 +76,9 @@
         if (validateFunc === undefined) {
             validateFunc = function () { return true; }
         }
+        if (liveValidated === undefined) {
+            liveValidated = false;
+        }
 
         return {
             name: name,

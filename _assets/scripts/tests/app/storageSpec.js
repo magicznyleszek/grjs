@@ -3,7 +3,10 @@ describe('storage', function () {
     'use strict';
 
     beforeEach(function () {
-        window.mockStorage = new app.storage('foo');
+        window.mockStorage = new app.storage(
+            'foo',
+            new app.broadcaster(new app.actions())
+        );
     });
 
     afterEach(function () {
@@ -27,6 +30,23 @@ describe('storage', function () {
             expect(storageItem).not.toEqual(null);
         });
 
+    });
+
+    it('should react to addDataToStorage event', function () {
+        var lengthBefore = null;
+        var lengthAfter = null;
+
+        lengthBefore = window.mockStorage.getAllData().length;
+
+        window.mockStorage._broadcaster.publish(
+            window.mockCtrl._broadcaster.actions.addDataToStorage,
+            { data: { foo: 'bar' } }
+        );
+
+        lengthAfter = window.mockStorage.getAllData().length;
+
+        expect(lengthBefore).toEqual(0);
+        expect(lengthAfter).toEqual(1);
     });
 
     describe('addData method', function () {

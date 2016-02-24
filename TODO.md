@@ -83,6 +83,7 @@ Refactoring:
 - notifier view should set container with methods by controller
 - storage should handle save data on broadcaster event
 - form view should only need broadcaster, rest should be set with methods by controller
+- write missing test for storage, form view and form controller
 
 Form flow:
 
