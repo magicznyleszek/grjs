@@ -2,11 +2,11 @@
 container organism
 ------------------------------------------------------------------------------*/
 
-[gui-o-container~="abs"] { position: absolute; }
+[gui-o-container~='abs'] { position: absolute; }
 
-[gui-o-container~="fix"] { position: fixed; }
+[gui-o-container~='fix'] { position: fixed; }
 
-[gui-o-container~="rel"] { position: relative; }
+[gui-o-container~='rel'] { position: relative; }
 
 [gui-o-container~='full'] {
     top: 0;

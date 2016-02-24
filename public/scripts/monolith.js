@@ -1,23 +1,100 @@
-/* 2016-02-20 */
+/* 2016-02-24 */
 (function (window) {
 
     'use strict';
 
+
+    // Crate a new app.
+    // @param {object} [properties] a list of properties:
+    // - @property {string} [notifierId] html id of notifications container
+    // - @property {string} [storageId] a prefix for storage cache
+    // - @property {object} [form] a form object with properties
+    // - - @property {string} [id] html id of form container
+    // - - @property {string} [submitId] html id of form submit button
+    // - - @property {array} [fields] a list of form fields
+    // - - - @element {object} a form element object with properties
+    // - - - - @property {string} [name] form field input name
+    // - - - - @property {string} [type] validation type
+    // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
-        this.broadcaster = new app.broadcaster(new app.actions);
-        this.validator = new app.validator();
-        this.storage = new app.storage(properties.storageId);
+        this.broadcaster = new app.broadcaster(new app.actions());
+        this.storage = new app.storage(
+            properties.storageId,
+            this.broadcaster
+        );
         this.notifier = new app.notifier.controller(
             new app.notifier.Notification(),
             new app.notifier.view(properties.notifierId),
             this.broadcaster
+        );
+        this.form = new app.form.controller(
+            new app.form.Input(new app.validator()),
+            new app.form.view(this.broadcaster, properties.form),
+            this.broadcaster,
+            properties.form
         );
     }
 
     window.addEventListener('load', function () {
         window.grjs = new App({
             notifierId: 'notifierContainer',
-            storageId: 'grjs'
+            storageId: 'grjs',
+            form: {
+                id: 'promoForm',
+                submitId: 'promoForm-registerButton',
+                fields: [
+                    {
+                        name: 'amount-1',
+                        type: null,
+                        liveValidate: false
+                    },
+                    {
+                        name: 'amount-5',
+                        type: null,
+                        liveValidate: false
+                    },
+                    {
+                        name: 'firstName',
+                        type: 'person',
+                        liveValidate: false
+                    },
+                    {
+                        name: 'lastName',
+                        type: 'person',
+                        liveValidate: false
+                    },
+                    {
+                        name: 'messageOne',
+                        type: 'text10',
+                        liveValidate: true
+                    },
+                    {
+                        name: 'messageTwo',
+                        type: 'text20',
+                        liveValidate: true
+                    },
+                    {
+                        name: 'email',
+                        type: 'email',
+                        liveValidate: false
+                    },
+                    {
+                        name: 'pass',
+                        type: 'password',
+                        liveValidate: false
+                    },
+                    {
+                        name: 'vid',
+                        type: 'vid',
+                        liveValidate: true
+                    },
+                    {
+                        name: 'counter',
+                        type: 'counter20',
+                        liveValidate: false
+                    }
+                ]
+            }
         });
     });
 
@@ -31,8 +108,12 @@
     // constructor
     var AppActions = function () {
         return {
-            testAction: 'GRJS_TEST_ACTION',
-            addNotification: 'GRJS_ADD_NOTIFICATION'
+            testAction: 'TEST_ACTION',
+            addNotification: 'ADD_NOTIFICATION',
+            formInputValueChanged: 'FORM_INPUT_VALUE_CHANGED',
+            formInputFocusChanged: 'FORM_INPUT_FOCUS_CHANGED',
+            formSubmitted: 'FORM_SUBMITTED',
+            addDataToStorage: 'ADD_DATA_TO_STORAGE'
         };
     };
 
@@ -89,9 +170,38 @@
     'use strict';
 
     // constructor
-    var AppStorage = function (namespace) {
+    var AppStorage = function (namespace, broadcaster) {
+        // safety checks
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless storage.');
+        }
+        if (namespace === undefined) {
+            namespace = 'appStorage';
+        }
+
         this._namespace = namespace;
+        this._broadcaster = broadcaster;
+
         this._prepareStorage(this._namespace);
+
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.addDataToStorage,
+            this._onAddDataToStorage.bind(this)
+        );
+    };
+
+    // Handle addDataToStorage event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppStorage.prototype._onAddDataToStorage = function (event, eventData) {
+        var data = eventData.data;
+
+        // safety checks
+        if (data === undefined) {
+            throw new Error('Tried to save undefined data to storage.');
+        }
+
+        this.addData(data);
     };
 
     // Creates a namespaced localStorage item.
@@ -199,6 +309,33 @@
         return isOverMin && isUnderMax;
     };
 
+    // Check if email is valid.
+    // @param {string} [email] email to be tested
+    AppValidator.prototype.testEmail = function (email) {
+        var lastIndex = email.length - 1;
+
+        var hasOneAt = email.split('@').length - 1 === 1;
+        var noStartAt = email[0] !== '@';
+        var noEndAt = email[lastIndex] !== '@';
+        var noStartDot = email[0] !== '.';
+        var noStartSpace = email[0] !== ' ';
+        var noEndSpace = email[lastIndex] !== ' ';
+        var noDotBeforeAt = email.indexOf('.@') < 0;
+        var noAtBeforeDot = email.indexOf('@.') < 0;
+        var noDotBeforeDot = email.indexOf('..') < 0;
+
+        if (hasOneAt === false) { return false; }
+        else if (noStartAt === false) { return false; }
+        else if (noEndAt === false) { return false; }
+        else if (noStartDot === false) { return false; }
+        else if (noStartSpace === false) { return false; }
+        else if (noEndSpace === false) { return false; }
+        else if (noDotBeforeAt === false) { return false; }
+        else if (noAtBeforeDot === false) { return false; }
+        else if (noDotBeforeDot === false) { return false; }
+        else { return true; }
+    };
+
     // export to app
 	window.app = window.app || {};
 	window.app.validator = AppValidator;
@@ -220,6 +357,8 @@
     // @param {string} [message] to be shown in notification
     // @param {string} [type] for distinguishin between errors and infos
     AppNotification.prototype.create = function (message, type) {
+        var element = document.createElement('div');
+
         // safety checks
         if (message === undefined) {
             throw new Error('Tried to create messageless notification.');
@@ -230,7 +369,6 @@
             default: type = this._defaultType;
         }
 
-        var element = document.createElement('div');
         element.setAttribute(this._amAttr, type);
         element.setAttribute('id', this._generateId());
         element.innerText = message;
@@ -266,6 +404,40 @@
     'use strict';
 
     // constructor
+    // @param {string} [containerId] html id of element container
+    var AppNotifierView = function (containerId) {
+        this._containerEl = document.getElementById(containerId);
+    };
+
+    // Add child node to container.
+    // @param {object} [element] node to be added
+    AppNotifierView.prototype.add = function (element) {
+        this._containerEl.appendChild(element);
+    };
+
+    // Remove child node from container by it's id.
+    // @param {string} [id] of node to be removed
+    AppNotifierView.prototype.remove = function (id) {
+        var targetEl = document.getElementById(id);
+        this._containerEl.removeChild(targetEl);
+    };
+
+    // export to app
+    window.app = window.app || {};
+    window.app.notifier = window.app.notifier || {};
+    window.app.notifier.view = AppNotifierView;
+
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
+    // @param {object} [model] controller model
+    // @param {object} [view] controller view
+    // @param {object} [broadcaster] global event handler
     var AppNotifierController = function (model, view, broadcaster) {
         // safety checks
         if (model === undefined) {
@@ -277,14 +449,14 @@
         if (broadcaster === undefined) {
             throw new Error('Tried to create broadcasterless controller.');
         }
-        this.model = model;
-        this.view = view;
-        this.broadcaster = broadcaster;
+        this._model = model;
+        this._view = view;
+        this._broadcaster = broadcaster;
 
         this._notificationLifespan = 2 * 1000; // 2s
 
-        this.broadcaster.subscribe(
-            this.broadcaster.actions.addNotification,
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.addNotification,
             this._onAddNotification.bind(this)
         );
     };
@@ -308,10 +480,10 @@
     // @param {string} [message] to be displayed
     // @param {string} [type] of the notification
     AppNotifierController.prototype._createNotification = function (message, type) {
-        var notification = this.model.create(message, type);
+        var notification = this._model.create(message, type);
         var id = notification.attributes.id.value;
 
-        this.view.add(notification);
+        this._view.add(notification);
 
         setTimeout(
             this._destroyNotification.bind(this),
@@ -323,7 +495,7 @@
     // Destroys a notification by id.
     // @param {string} [id] of notification to be destroyed
     AppNotifierController.prototype._destroyNotification = function (id) {
-        this.view.remove(id);
+        this._view.remove(id);
     };
 
     // export to app
@@ -339,27 +511,383 @@
     'use strict';
 
     // constructor
-    // @param {string} [containerId] html id of element container
-    var AppNotifierView = function (containerId) {
-        this._containerEl = document.getElementById(containerId);
+    var AppInput = function (validator) {
+        var selfValidator = null;
+
+        // safety checks
+        if (validator === undefined) {
+            throw new Error('Tried to create validatorless model.');
+        }
+
+        var selfValidator = validator;
+
+        // a list of validator types (functions)
+        this._validateTypes = {
+            person: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var hasNoDigits = selfValidator.testHasNoDigits(string);
+                return isNonEmpty && hasNoDigits;
+            },
+            text10: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder11 = selfValidator.testLengthUnder(string, 11);
+                return isNonEmpty && isUnder11;
+            },
+            text20: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder21 = selfValidator.testLengthUnder(string, 21);
+                return isNonEmpty && isUnder21;
+            },
+            email: function () {
+                var string = this.value;
+                return selfValidator.testEmail(string);
+            },
+            password: function () {
+                var string = this.value;
+                var isOver7 = selfValidator.testLengthOver(string, 7);
+                var hasDigits = selfValidator.testHasDigits(string);
+                var hasLetters = selfValidator.testHasLetters(string);
+                var hasSpecials = selfValidator.testHasSpecials(string);
+                return isOver7 && hasDigits && hasLetters && hasSpecials;
+            },
+            vid: function () {
+                var string = this.value;
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isUnder6 = selfValidator.testLengthUnder(string, 6);
+                var hasOnlyDigits = selfValidator.testHasOnlyDigits(string);
+                return isNonEmpty && isUnder6 && hasOnlyDigits;
+            },
+            counter20: function () {
+                var string = this.value;
+                var number = parseInt(string);
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
+                var isInRange = selfValidator.testNumberRange(number, 1, 20);
+                return isNonEmpty && isInRange;
+            }
+        };
     };
 
-    // Add child node to container.
-    // @param {object} [element] node to be added
-    AppNotifierView.prototype.add = function (element) {
-        this._containerEl.appendChild(element);
-    };
+    // Creates an input instance.
+    // @param {string} [name] name of the input
+    // @param {string} [type] validate type to match function with
+    // @param {bool} [liveValidated] for marking input as live validating
+    AppInput.prototype.create = function (name, type, liveValidated) {
+        var validateFunc = this._validateTypes[type];
 
-    // Remove child node from container by it's id.
-    // @param {string} [id] of node to be removed
-    AppNotifierView.prototype.remove = function (id) {
-        var targetEl = document.getElementById(id);
-        this._containerEl.removeChild(targetEl);
+        // safety checks
+        if (name === undefined) {
+            throw new Error('Tried to create nameless input.');
+        }
+        if (validateFunc === undefined) {
+            validateFunc = function () { return true; }
+        }
+
+        return {
+            name: name,
+            value: '',
+            validate: validateFunc,
+            isLiveValidated: liveValidated,
+            isEmpty: true,
+            isFocused: false,
+            isValid: false
+        };
     };
 
     // export to app
     window.app = window.app || {};
-    window.app.notifier = window.app.notifier || {};
-    window.app.notifier.view = AppNotifierView;
+    window.app.form = window.app.form || {};
+    window.app.form.Input = AppInput;
+
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
+    // @param {object} [broadcaster] global event handler
+    // @param {object} [form] form settings
+    var AppFormView = function (broadcaster, form) {
+        // safety checks
+        if (form === undefined) {
+            throw new Error('Tried to create formless controller.');
+        }
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless controller.');
+        }
+
+        this._formId = form.id;
+        this._containerEl = document.getElementById(this._formId);
+        this._broadcaster = broadcaster;
+        this._stateAttrs = {
+            empty: 'data-state-empty',
+            focused: 'data-state-focused',
+            valid: 'data-state-valid'
+        };
+    };
+
+    // Returns dom input element.
+    // @param {string} [name] name attribute of input element
+    AppFormView.prototype._findInputEl = function (name) {
+        return this._containerEl.querySelector('*[name="' + name + '"]');
+    };
+
+    // Binds  form submitting.
+    // @param {string} [submitButtonId] id of submit button
+    AppFormView.prototype.bindSubmit = function (submitButtonId) {
+        var self = this;
+        var buttonEl = this._containerEl.querySelector('*[id="' + submitButtonId + '"]');
+
+        buttonEl.addEventListener('click', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formSubmitted,
+                { id: self._formId }
+            );
+        });
+    };
+
+    // Binds to events on input.
+    // @param {object} [input] input properties data
+    AppFormView.prototype.bindInput = function (input) {
+        var self = this;
+        var inputName = input.name;
+        var inputEl = this._findInputEl(inputName);
+
+        inputEl.addEventListener('input', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formInputValueChanged,
+                { name: inputName, value: inputEl.value }
+            );
+        });
+        inputEl.addEventListener('focus', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formInputFocusChanged,
+                { name: inputName, isFocused: true }
+            );
+        });
+        inputEl.addEventListener('blur', function () {
+            self._broadcaster.publish(
+                self._broadcaster.actions.formInputFocusChanged,
+                { name: inputName, isFocused: false }
+            );
+        });
+
+        this.refreshInputState(input);
+    };
+
+    // Refreshes input view state.
+    // @param {object} [input] input properties data
+    AppFormView.prototype.refreshInputState = function (input) {
+        var inputEl = this._findInputEl(input.name);
+
+        if (input.isEmpty) {
+            inputEl.setAttribute(this._stateAttrs.empty, '');
+        } else {
+            if (inputEl.hasAttribute(this._stateAttrs.empty)) {
+                inputEl.removeAttribute(this._stateAttrs.empty);
+            }
+        }
+
+        if (input.isFocused) {
+            inputEl.setAttribute(this._stateAttrs.focused, '');
+        } else {
+            if (inputEl.hasAttribute(this._stateAttrs.focused)) {
+                inputEl.removeAttribute(this._stateAttrs.focused);
+            }
+        }
+
+        if (input.isValid) {
+            inputEl.setAttribute(this._stateAttrs.valid, '');
+        } else {
+            if (inputEl.hasAttribute(this._stateAttrs.valid)) {
+                inputEl.removeAttribute(this._stateAttrs.valid);
+            }
+        }
+    };
+
+    // export to app
+    window.app = window.app || {};
+    window.app.form = window.app.form || {};
+    window.app.form.view = AppFormView;
+
+})(window);
+
+/* --- */
+(function (window) {
+
+    'use strict';
+
+    // constructor
+    // @param {object} [model] controller model
+    // @param {object} [view] controller view
+    // @param {object} [broadcaster] global event handler
+    // @param {object} [form] form settings
+    var AppFormController = function (model, view, broadcaster, form) {
+        // safety checks
+        if (model === undefined) {
+            throw new Error('Tried to create modelless controller.');
+        }
+        if (view === undefined) {
+            throw new Error('Tried to create viewless controller.');
+        }
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless controller.');
+        }
+        if (form === undefined) {
+            throw new Error('Tried to create formless controller.');
+        }
+
+        this._model = model;
+        this._view = view;
+        this._broadcaster = broadcaster;
+        this._formData = form;
+        this._inputs = {};
+
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.formInputValueChanged,
+            this._onFormInputValueChanged.bind(this)
+        );
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.formInputFocusChanged,
+            this._onFormInputFocusChanged.bind(this)
+        );
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.formSubmitted,
+            this._onFormSubmitted.bind(this)
+        );
+
+        this._prepareView();
+    };
+
+    // Handle formInputValueChanged event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppFormController.prototype._onFormInputValueChanged = function (event, data) {
+        var value = data.value;
+        var inputName = data.name;
+        var inputInstance = this._inputs[inputName];
+
+        inputInstance.value = value;
+        inputInstance.isEmpty = value.length < 1;
+        this._view.refreshInputState(inputInstance);
+
+        if (inputInstance.isLiveValidated) {
+            this._validateInput(inputInstance.name);
+        }
+    };
+
+    // Handle formInputFocusChanged event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppFormController.prototype._onFormInputFocusChanged = function (event, data) {
+        var isFocused = data.isFocused;
+        var inputName = data.name;
+        var inputInstance = this._inputs[inputName];
+
+        inputInstance.isFocused = isFocused;
+        this._view.refreshInputState(inputInstance);
+
+        if (inputInstance.isFocused === false) {
+            this._validateInput(inputInstance.name);
+        }
+    };
+
+    // Handle formSubmitted event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppFormController.prototype._onFormSubmitted = function (event, data) {
+        console.log('form submitted');
+        this._validateAllInputs();
+    };
+
+    // Make all inputs self-validate.
+    AppFormController.prototype._validateAllInputs = function () {
+        var errorsCount = 0;
+
+        // validate all inputs
+        for (var name in this._inputs) {
+            if (this._inputs.hasOwnProperty(name)) {
+                if (this._validateInput(name) === false) {
+                    errorsCount += 1;
+                }
+            }
+        }
+
+        // save data to storage if no errors
+        if (errorsCount === 0) {
+            // save data to storage
+            this._broadcaster.publish(
+                this._broadcaster.actions.addDataToStorage,
+                {
+                    data: this._inputs
+                }
+            );
+            // notify user about success
+            this._broadcaster.publish(
+                this._broadcaster.actions.addNotification,
+                {
+                    message: 'Form successfully submitted!',
+                    type: 'info'
+                }
+            );
+        }
+    };
+
+    // Make input self-validate and show error notification.
+    // Returns boolean isValid; useful for other places.
+    // @param {string} [name] input name
+    AppFormController.prototype._validateInput = function (name) {
+        var inputInstance = this._inputs[name];
+        var isValid = inputInstance.validate();
+
+        if (isValid === false) {
+            this._notifyInputInvalid(inputInstance.name, inputInstance.value);
+        }
+        return isValid;
+    };
+
+    // Crate an invalid input notification.
+    // @param {string} [name] input name
+    // @param {string} [value] input value
+    AppFormController.prototype._notifyInputInvalid = function (name, value) {
+        var message = 'I\'m sorry, but "' + value + '" is not a proper value for ' + name;
+
+        this._broadcaster.publish(
+            this._broadcaster.actions.addNotification,
+            {
+                message: message,
+                type: 'error'
+            }
+        );
+    };
+
+    // Prepare and bind all view things.
+    AppFormController.prototype._prepareView = function () {
+        var fields = this._formData.fields;
+        var submitButtonId = this._formData.submitId;
+
+        // bind all inputs
+        for (var i = 0; i < fields.length; i += 1) {
+            var instance = this._model.create(
+                fields[i].name,
+                fields[i].type,
+                fields[i].liveValidate
+            );
+            this._inputs[instance.name] = instance;
+            this._view.bindInput(instance);
+        }
+
+        // bind submitting
+        this._view.bindSubmit(submitButtonId);
+    };
+
+    // export to app
+    window.app = window.app || {};
+    window.app.form = window.app.form || {};
+    window.app.form.controller = AppFormController;
 
 })(window);

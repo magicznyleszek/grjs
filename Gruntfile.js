@@ -48,8 +48,11 @@ module.exports = function(grunt) {
                         '_assets/scripts/app/storage.js',
                         '_assets/scripts/app/validator.js',
                         '_assets/scripts/app/notifier/notification.js',
+                        '_assets/scripts/app/notifier/notifierView.js',
                         '_assets/scripts/app/notifier/notifierController.js',
-                        '_assets/scripts/app/notifier/notifierView.js'
+                        '_assets/scripts/app/form/input.js',
+                        '_assets/scripts/app/form/formView.js',
+                        '_assets/scripts/app/form/formController.js'
                     ]
                 }
             }
@@ -76,28 +79,40 @@ module.exports = function(grunt) {
                 tasks: ['concat:scripts']
             }
         },
-        jasmine: {
-            src: '_assets/scripts/app/**/*.js',
-            options: {
-                vendor: '_assets/scripts/thirdparty/**/*.js',
-                specs: '_assets/scripts/tests/**/*Spec.js',
-                helpers: '_assets/scripts/tests/**/*Helper.js'
+        connect: {
+            test: {
+                options: {
+                    port: 8000,
+                    debug: true
+                }
             }
         },
-        'jasmine-server': {
-            browser: false
+        jasmine: {
+            default: {
+                src: '_assets/scripts/app/**/*.js',
+                options: {
+                    specs: '_assets/scripts/tests/**/*Spec.js',
+                    host: 'http://127.0.0.1:8000/',
+                    display: 'full',
+                    summary: true
+                }
+            }
         }
     });
 
+    grunt.registerTask('test', [
+        'connect',
+        'jasmine:default'
+    ]);
     grunt.registerTask('build_assets', [
-        'jasmine',
         'clean:public',
         'svgstore',
         'concat:scripts',
         'cssnext'
     ]);
     grunt.registerTask('default', [
+        'test',
         'build_assets',
         'watch'
     ]);
-}
+};

@@ -19,9 +19,20 @@ text molecule
 [gui-m-text~='lowercased'] { text-transform: lowercase; }
 [gui-m-text~='untransformed'] { text-transform: none; }
 
+[gui-m-text~='underlined'] { text-decoration: underline; }
+[gui-m-text~='narrow'] { letter-spacing: -0.05rem; }
+
 /* trims text with an ellipsis */
 [gui-m-text~='trimmed'] {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+/* colors */
+[gui-m-text~='darkOrange'] { color: var(--a-c-darkOrange); }
+
+/* custom sizes */
+[gui-m-text~='s-55'] { font-size: calc(calc(55/19) * 1rem); }
+[gui-m-text~='s-33'] { font-size: calc(calc(33/19) * 1rem); }
+[gui-m-text~='s-25'] { font-size: calc(calc(25/19) * 1rem); }

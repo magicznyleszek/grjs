@@ -9,17 +9,18 @@ describe('notifier: controller', function () {
         document.body.appendChild(mockEl);
 
         spyOn(app.notifier.controller.prototype, '_onAddNotification');
+        var mockBroadcaster = new app.broadcaster(new app.actions());
         window.mockCtrl = new app.notifier.controller(
             new app.notifier.Notification(),
             new app.notifier.view('fooContainer'),
-            new app.broadcaster(new app.actions()),
+            mockBroadcaster
         );
 
         jasmine.clock().install();
     });
 
     afterEach(function () {
-        var mockViewContainer = window.mockCtrl.view._containerEl;
+        var mockViewContainer = window.mockCtrl._view._containerEl;
         while (mockViewContainer.firstChild) {
             mockViewContainer.removeChild(mockViewContainer.firstChild);
         }
@@ -32,7 +33,10 @@ describe('notifier: controller', function () {
     });
 
     it('should react to addNotification event', function () {
-        app.broadcaster.publish(app.actions.addNotification, { message: 'a' });
+        window.mockCtrl._broadcaster.publish(
+            window.mockCtrl._broadcaster.actions.addNotification,
+            { message: 'a' }
+        );
         expect(window.mockCtrl._onAddNotification).toHaveBeenCalled();
     });
 
@@ -45,7 +49,7 @@ describe('notifier: controller', function () {
 
         it('should add element to view\'s container', function () {
             window.mockCtrl._createNotification('foo', 'error');
-            expect(window.mockCtrl.view._containerEl.children.length).toEqual(1);
+            expect(window.mockCtrl._view._containerEl.children.length).toEqual(1);
         });
 
         it('should remove element after timeout', function () {
@@ -54,11 +58,11 @@ describe('notifier: controller', function () {
             var lengthAfter = null;
 
             window.mockCtrl._createNotification('foo', 'error');
-            lengthBefore = window.mockCtrl.view._containerEl.children.length;
+            lengthBefore = window.mockCtrl._view._containerEl.children.length;
 
             jasmine.clock().tick(lifespan + 1);
 
-            lengthAfter = window.mockCtrl.view._containerEl.children.length;
+            lengthAfter = window.mockCtrl._view._containerEl.children.length;
 
             expect(lengthBefore).toEqual(1);
             expect(lengthAfter).toEqual(0);

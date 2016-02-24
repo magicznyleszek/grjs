@@ -1,10 +1,6 @@
 /*------------------------------------------------------------------------------
-symbol config
+width molecule
 ------------------------------------------------------------------------------*/
 
-:root {
-
-    --symbol-e-logo-w: 16.16rem; /* 307px @ 19px */
-    --symbol-e-logo-h: 4.05rem; /* 77px @ 19px */
-
-}
+[gui-m-width~='ipad-h'] { max-width: var(--a-s-ipad-h); }
+[gui-m-width~='ipad-v'] { max-width: var(--a-s-ipad-v); }

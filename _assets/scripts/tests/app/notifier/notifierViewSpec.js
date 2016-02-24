@@ -16,6 +16,8 @@ describe('notifier: view', function () {
         while (mockViewContainer.firstChild) {
             mockViewContainer.removeChild(mockViewContainer.firstChild);
         }
+
+        window.mockView = undefined;
     });
 
     it('should exist', function () {

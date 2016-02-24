@@ -4,7 +4,7 @@ button config
 
 :root {
 
-    --button-br: 0.15rem; /* 3px @ 19px */
+    --button-br: var(--a-s-tiny);
     --button-txt: var(--a-c-white);
     --button-fontsize: 1.21rem; /* 23px @ 19px */
     --button-padding: var(--a-s-little);
