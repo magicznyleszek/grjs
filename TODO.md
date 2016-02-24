@@ -46,17 +46,19 @@ Details:
     + has only digits
     + has letters
     + has special characters
+    + email
 + storage
     + create localStorage data object if none there
     + save data to localStorage
     + get data from localStorage
 - form
-    - model for inputs
-        - validation options
-        - id
-        - isEmpty
-        - isError
-        - isFocused
+    + model for inputs
+        + validate callback
+        + name
+        + is live validated
+        + is empty
+        + is focused
+        + is errored
     - view
         - update attributes by input id (is-empty, is-error)
         - send event on input lost focus
@@ -72,3 +74,40 @@ Details:
             - on submit button:
                 1. loop through inputs: validate input, (notify error) and go next
                 2. if all valid save data with dataKeeper and notify success
++ notification styles
++ textbox white styles
+
+Refactoring:
+
+- notifier should move html creation from model to view
+- notifier view should set container with methods by controller
+- storage should handle save data on broadcaster event
+- form view should only need broadcaster, rest should be set with methods by controller
+
+Form flow:
+
+- controller receives:
+    - input model
+    - view
+    - broadcaster
+    - form data
+- controller builds fields from models
+- controller sends fields to view for binding
+- view receives list of inputs to watch
+- view binds on input:
+    - focus and lost focus = send focus event(id, isFocused)
+    - value changes (typing?) = send value event(id, value)
+- view binds on submit = send submit event(inputs array {id, value})
+- controller watches events
+    - focus
+        - set model flag
+        - view refresh input status
+    - value
+        - set model value
+        - validate value
+        - send notification on error for some
+        - view refresh input status
+    - submitted
+        - validate all loop = send notification event on any error
+        - send notification event on all success
+        - send save storage data event on all success

@@ -3,9 +3,38 @@
     'use strict';
 
     // constructor
-    var AppStorage = function (namespace) {
+    var AppStorage = function (namespace, broadcaster) {
+        // safety checks
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless storage.');
+        }
+        if (namespace === undefined) {
+            namespace = 'appStorage';
+        }
+
         this._namespace = namespace;
+        this._broadcaster = broadcaster;
+
         this._prepareStorage(this._namespace);
+
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.addDataToStorage,
+            this._onAddDataToStorage.bind(this)
+        );
+    };
+
+    // Handle addDataToStorage event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppStorage.prototype._onAddDataToStorage = function (event, eventData) {
+        var data = eventData.data;
+
+        // safety checks
+        if (data === undefined) {
+            throw new Error('Tried to save undefined data to storage.');
+        }
+
+        this.addData(data);
     };
 
     // Creates a namespaced localStorage item.

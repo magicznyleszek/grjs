@@ -3,3 +3,5 @@ inlineblock molecule
 ------------------------------------------------------------------------------*/
 
 [gui-m-inlineblock] { display: inline-block; }
+
+[gui-m-inlineblock~='middle'] { vertical-align: middle; }

@@ -2,6 +2,10 @@
 _site
 .jekyll-metadata
 
+# grunt temp files
+.grunt
+_SpecRunner.html
+
 # assets
 node_modules
 

@@ -3,30 +3,14 @@ base typographic rules
 ------------------------------------------------------------------------------*/
 
 :--headers {
+    font-size: inherit;
+    font-weight: inherit;
     line-height: 1;
     margin: 0;
     padding: 0;
 }
 
-:--textblocks:not(:last-child) {
-    margin-top: 0;
-    margin-bottom: var(--a-s-medium);
-}
-
-h1 { font-size: 3rem; }
-
-h2 {
-    font-size: 2rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-
-h3 { font-size: 1.5rem; }
-
-h4 {
-    font-size: inherit;
-    font-weight: 700;
-}
+:--textblocks { margin: 0; }
 
 p, pre { margin: 0; }
 
@@ -103,4 +87,5 @@ pre code {
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
+    text-rendering: inherit;
 }

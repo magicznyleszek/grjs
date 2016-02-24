@@ -50,14 +50,19 @@ atoms - a palette of all possible variables used throughout the project
     /* sizes */
 
     --a-s-infinite: 1000rem; /* extremely big */
-    --a-s-colossal: 5rem; /* 80px @ 16px */
-    --a-s-huge: 4rem; /* 64px @ 16px */
-    --a-s-giant: 2.5rem; /* 40px @ 16px */
-    --a-s-big: 2rem; /* 32px @ 16px */
-    --a-s-large: 1.25rem; /* 20px @ 16px */
-    --a-s-medium: 1rem; /* 16px @ 16px */
-    --a-s-small: 0.625rem; /* 10px @ 16px */
-    --a-s-little: 0.5rem; /* 8px @ 16px */
-    --a-s-tiny: 0.25rem; /* 4px @ 16px */
+    --a-s-colossal: 8.42rem; /* 160px @ 19px */
+    --a-s-huge: 6.32rem; /* 120px @ 19px */
+    --a-s-giant: 5.05rem; /* 96px @ 19px */
+    --a-s-big: 2.53rem; /* 48px @ 19px */
+    --a-s-large: 1.26rem; /* 24px @ 19px */
+    --a-s-medium: 0.84rem; /* 16px @ 19px */
+    --a-s-small: 0.63rem; /* 12px @ 19px */
+    --a-s-little: 0.32rem; /* 6px @ 19px */
+    --a-s-tiny: 0.21rem; /* 4px @ 19px */
+
+    /* special sizes */
+
+    --a-s-ipad-h: 40.42rem; /* 768px @ 19px */
+    --a-s-ipad-v: 53.89rem; /* 1024px @ 19px */
 
 }
