@@ -26,7 +26,7 @@
 
         element.setAttribute(this._amAttr, type);
         element.setAttribute('id', this._generateId());
-        element.innerText = message;
+        element.appendChild(document.createTextNode(message));
 
         return element;
     };
