@@ -18,7 +18,10 @@
     // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
         this.broadcaster = new app.broadcaster(new app.actions());
-        this.storage = new app.storage(properties.storageId);
+        this.storage = new app.storage(
+            properties.storageId,
+            this.broadcaster
+        );
         this.notifier = new app.notifier.controller(
             new app.notifier.Notification(),
             new app.notifier.view(properties.notifierId),
@@ -109,7 +112,8 @@
             addNotification: 'ADD_NOTIFICATION',
             formInputValueChanged: 'FORM_INPUT_VALUE_CHANGED',
             formInputFocusChanged: 'FORM_INPUT_FOCUS_CHANGED',
-            formSubmitted: 'FORM_SUBMITTED'
+            formSubmitted: 'FORM_SUBMITTED',
+            addDataToStorage: 'ADD_DATA_TO_STORAGE'
         };
     };
 
@@ -166,9 +170,38 @@
     'use strict';
 
     // constructor
-    var AppStorage = function (namespace) {
+    var AppStorage = function (namespace, broadcaster) {
+        // safety checks
+        if (broadcaster === undefined) {
+            throw new Error('Tried to create broadcasterless storage.');
+        }
+        if (namespace === undefined) {
+            namespace = 'appStorage';
+        }
+
         this._namespace = namespace;
+        this._broadcaster = broadcaster;
+
         this._prepareStorage(this._namespace);
+
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.addDataToStorage,
+            this._onAddDataToStorage.bind(this)
+        );
+    };
+
+    // Handle addDataToStorage event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppStorage.prototype._onAddDataToStorage = function (event, eventData) {
+        var data = eventData.data;
+
+        // safety checks
+        if (data === undefined) {
+            throw new Error('Tried to save undefined data to storage.');
+        }
+
+        this.addData(data);
     };
 
     // Creates a namespaced localStorage item.
@@ -514,7 +547,7 @@
             },
             password: function () {
                 var string = this.value;
-                var isOver7 = selfValidator.testLengthUnder(string, 7);
+                var isOver7 = selfValidator.testLengthOver(string, 7);
                 var hasDigits = selfValidator.testHasDigits(string);
                 var hasLetters = selfValidator.testHasLetters(string);
                 var hasSpecials = selfValidator.testHasSpecials(string);
@@ -528,8 +561,9 @@
                 return isNonEmpty && isUnder6 && hasOnlyDigits;
             },
             counter20: function () {
-                var number = parseInt(this.value);
-                var isNonEmpty = selfValidator.testLengthOver(number, 0);
+                var string = this.value;
+                var number = parseInt(string);
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
                 var isInRange = selfValidator.testNumberRange(number, 1, 20);
                 return isNonEmpty && isInRange;
             }
@@ -553,10 +587,10 @@
 
         return {
             name: name,
-            value: null,
+            value: '',
             validate: validateFunc,
-            isLiveValidated: false,
-            isEmpty: false,
+            isLiveValidated: liveValidated,
+            isEmpty: true,
             isFocused: false,
             isValid: false
         };
@@ -641,6 +675,8 @@
                 { name: inputName, isFocused: false }
             );
         });
+
+        this.refreshInputState(input);
     };
 
     // Refreshes input view state.
@@ -709,6 +745,144 @@
         this._view = view;
         this._broadcaster = broadcaster;
         this._formData = form;
+        this._inputs = {};
+
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.formInputValueChanged,
+            this._onFormInputValueChanged.bind(this)
+        );
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.formInputFocusChanged,
+            this._onFormInputFocusChanged.bind(this)
+        );
+        this._broadcaster.subscribe(
+            this._broadcaster.actions.formSubmitted,
+            this._onFormSubmitted.bind(this)
+        );
+
+        this._prepareView();
+    };
+
+    // Handle formInputValueChanged event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppFormController.prototype._onFormInputValueChanged = function (event, data) {
+        var value = data.value;
+        var inputName = data.name;
+        var inputInstance = this._inputs[inputName];
+
+        inputInstance.value = value;
+        inputInstance.isEmpty = value.length < 1;
+        this._view.refreshInputState(inputInstance);
+
+        if (inputInstance.isLiveValidated) {
+            this._validateInput(inputInstance.name);
+        }
+    };
+
+    // Handle formInputFocusChanged event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppFormController.prototype._onFormInputFocusChanged = function (event, data) {
+        var isFocused = data.isFocused;
+        var inputName = data.name;
+        var inputInstance = this._inputs[inputName];
+
+        inputInstance.isFocused = isFocused;
+        this._view.refreshInputState(inputInstance);
+
+        if (inputInstance.isFocused === false) {
+            this._validateInput(inputInstance.name);
+        }
+    };
+
+    // Handle formSubmitted event.
+    // @param {object} [event]
+    // @param {object} [data] of the event
+    AppFormController.prototype._onFormSubmitted = function (event, data) {
+        console.log('form submitted');
+        this._validateAllInputs();
+    };
+
+    // Make all inputs self-validate.
+    AppFormController.prototype._validateAllInputs = function () {
+        var errorsCount = 0;
+
+        // validate all inputs
+        for (var name in this._inputs) {
+            if (this._inputs.hasOwnProperty(name)) {
+                if (this._validateInput(name) === false) {
+                    errorsCount += 1;
+                }
+            }
+        }
+
+        // save data to storage if no errors
+        if (errorsCount === 0) {
+            // save data to storage
+            this._broadcaster.publish(
+                this._broadcaster.actions.addDataToStorage,
+                {
+                    data: this._inputs
+                }
+            );
+            // notify user about success
+            this._broadcaster.publish(
+                this._broadcaster.actions.addNotification,
+                {
+                    message: 'Form successfully submitted!',
+                    type: 'info'
+                }
+            );
+        }
+    };
+
+    // Make input self-validate and show error notification.
+    // Returns boolean isValid; useful for other places.
+    // @param {string} [name] input name
+    AppFormController.prototype._validateInput = function (name) {
+        var inputInstance = this._inputs[name];
+        var isValid = inputInstance.validate();
+
+        if (isValid === false) {
+            this._notifyInputInvalid(inputInstance.name, inputInstance.value);
+        }
+        return isValid;
+    };
+
+    // Crate an invalid input notification.
+    // @param {string} [name] input name
+    // @param {string} [value] input value
+    AppFormController.prototype._notifyInputInvalid = function (name, value) {
+        var message = 'I\'m sorry, but "' + value + '" is not a proper value for ' + name;
+
+        this._broadcaster.publish(
+            this._broadcaster.actions.addNotification,
+            {
+                message: message,
+                type: 'error'
+            }
+        );
+    };
+
+    // Prepare and bind all view things.
+    AppFormController.prototype._prepareView = function () {
+        var fields = this._formData.fields;
+        var submitButtonId = this._formData.submitId;
+
+        // bind all inputs
+        for (var i = 0; i < fields.length; i += 1) {
+            var instance = this._model.create(
+                fields[i].name,
+                fields[i].type,
+                fields[i].liveValidate
+            );
+            this._inputs[instance.name] = instance;
+            this._view.bindInput(instance);
+        }
+
+        // bind submitting
+        this._view.bindSubmit(submitButtonId);
     };
 
     // export to app

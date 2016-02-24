@@ -69,6 +69,8 @@
                 { name: inputName, isFocused: false }
             );
         });
+
+        this.refreshInputState(input);
     };
 
     // Refreshes input view state.

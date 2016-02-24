@@ -17,7 +17,10 @@
     // - - - - @property {bool} [liveValidate] turns live validation on
     function App(properties) {
         this.broadcaster = new app.broadcaster(new app.actions());
-        this.storage = new app.storage(properties.storageId);
+        this.storage = new app.storage(
+            properties.storageId,
+            this.broadcaster
+        );
         this.notifier = new app.notifier.controller(
             new app.notifier.Notification(),
             new app.notifier.view(properties.notifierId),

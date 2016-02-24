@@ -79,28 +79,40 @@ module.exports = function(grunt) {
                 tasks: ['concat:scripts']
             }
         },
+        connect: {
+            test: {
+                options: {
+                    port: 8000,
+                    debug: true
+                }
+            }
+        },
         jasmine: {
             default: {
                 src: '_assets/scripts/app/**/*.js',
                 options: {
                     specs: '_assets/scripts/tests/**/*Spec.js',
+                    host: 'http://127.0.0.1:8000/',
                     display: 'full',
-                    summary: true,
-                    browser: true
+                    summary: true
                 }
             }
         }
     });
 
+    grunt.registerTask('test', [
+        'connect',
+        'jasmine:default'
+    ]);
     grunt.registerTask('build_assets', [
-        'jasmine',
         'clean:public',
         'svgstore',
         'concat:scripts',
         'cssnext'
     ]);
     grunt.registerTask('default', [
+        'test',
         'build_assets',
         'watch'
     ]);
-}
+};

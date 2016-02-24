@@ -39,7 +39,7 @@
             },
             password: function () {
                 var string = this.value;
-                var isOver7 = selfValidator.testLengthUnder(string, 7);
+                var isOver7 = selfValidator.testLengthOver(string, 7);
                 var hasDigits = selfValidator.testHasDigits(string);
                 var hasLetters = selfValidator.testHasLetters(string);
                 var hasSpecials = selfValidator.testHasSpecials(string);
@@ -53,8 +53,9 @@
                 return isNonEmpty && isUnder6 && hasOnlyDigits;
             },
             counter20: function () {
-                var number = parseInt(this.value);
-                var isNonEmpty = selfValidator.testLengthOver(number, 0);
+                var string = this.value;
+                var number = parseInt(string);
+                var isNonEmpty = selfValidator.testLengthOver(string, 0);
                 var isInRange = selfValidator.testNumberRange(number, 1, 20);
                 return isNonEmpty && isInRange;
             }
@@ -78,10 +79,10 @@
 
         return {
             name: name,
-            value: null,
+            value: '',
             validate: validateFunc,
-            isLiveValidated: false,
-            isEmpty: false,
+            isLiveValidated: liveValidated,
+            isEmpty: true,
             isFocused: false,
             isValid: false
         };

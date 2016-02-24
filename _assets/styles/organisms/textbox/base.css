@@ -36,6 +36,13 @@ textbox organism
 
 }
 
+[gui-o-textbox] input[data-state-focused] + label,
+[gui-o-textbox] textarea[data-state-focused] + label,
+[gui-o-textbox] input:not([data-state-empty]) + label,
+[gui-o-textbox] textarea:not([data-state-empty]) + label {
+    display: none;
+}
+
 [gui-o-textbox] label {
     position: absolute;
     z-index: var(--a-z-1);

@@ -30,4 +30,8 @@ describe('pubsub: actions', function () {
         expect(window.mockActions.formSubmitted).toBeDefined();
     });
 
+    it('should have addDataToStorage action', function () {
+        expect(window.mockActions.addDataToStorage).toBeDefined();
+    });
+
 });
