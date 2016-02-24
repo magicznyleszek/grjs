@@ -14,7 +14,7 @@ And to actually build the project, you have to run:
 
 ```
 npm install
-grunt build
+grunt build_assets
 jekyll serve --watch --baseurl ''
 ```
 
