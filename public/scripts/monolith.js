@@ -584,6 +584,9 @@
         if (validateFunc === undefined) {
             validateFunc = function () { return true; }
         }
+        if (liveValidated === undefined) {
+            liveValidated = false;
+        }
 
         return {
             name: name,
@@ -800,7 +803,6 @@
     // @param {object} [event]
     // @param {object} [data] of the event
     AppFormController.prototype._onFormSubmitted = function (event, data) {
-        console.log('form submitted');
         this._validateAllInputs();
     };
 

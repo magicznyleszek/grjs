@@ -81,7 +81,6 @@
     // @param {object} [event]
     // @param {object} [data] of the event
     AppFormController.prototype._onFormSubmitted = function (event, data) {
-        console.log('form submitted');
         this._validateAllInputs();
     };
 
